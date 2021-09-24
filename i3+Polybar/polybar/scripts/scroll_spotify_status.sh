@@ -1,0 +1,1 @@
+/home/soumyarp/Scripts/scroll_spotify_status.sh

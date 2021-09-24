@@ -1,0 +1,1 @@
+/home/soumyarp/Scripts/get_spotify_status.sh

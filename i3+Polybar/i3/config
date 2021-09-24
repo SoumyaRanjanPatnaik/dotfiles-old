@@ -1,0 +1,248 @@
+### Startup Scripts
+#
+# Polybar
+exec_always --no-startup-id ~/.config/polybar/launch.sh &
+# Compton
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf -b
+# Nitrogen
+exec_always --no-startup-id nitrogen --restore
+
+# fan-curve
+exec_always --no-startup-id asusctl fan-curve -m Quiet -f cpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
+exec_always --no-startup-id asusctl fan-curve -m Quiet -f gpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
+exec_always --no-startup-id asusctl fan-curve -m Quiet -e true
+
+
+### Variables
+#
+# Super key.
+set $mod Mod4
+# Alt Key
+set $alt Mod4
+
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+
+# Your preferred terminal emulator
+set $term alacritty
+
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+# set $menu dmenu_path | dmenu | xargs swaymsg exec --
+set $menu "rofi -combi-modi window,drun,ssh,run -show combi -show-icons"
+
+# Workspaces
+set $ws0 "1: General"
+set $ws1 "2: Shell"
+set $ws2 "3: Dev"
+set $ws3 "4: Web"
+set $ws4 "5: Music"
+set $ws5 "6: Mail"
+set $ws6 "7: Urgent"
+set $ws7 "8: Focused"
+
+# gaps
+gaps inner 10
+gaps outer 5
+gaps bottom 20
+# Border and Titlebar
+default_border pixel 5
+
+# Colour Scheme
+#  colorclass                  border   background     text      indicator  child_border
+client.focused              "#52AEFFc0" "#52AEFFfd" "#000000" "#fede00ff" "#52AEFFc0"
+client.unfocused            "#eeeeee50" "#00000070" "#ffffff" "#000000a0" "#3287db00"
+client.focused_inactive     "#3287db00" "#080808c0" "#ffffff" "#F1CF5500" "#3287db00"
+client.urgent               "#FF4133c0" "#FF4133c0" "#ffffff" "#F1CF55c0" "#52AEFFa0"
+client.placeholder          "#00000000" "#0c0c0c00" "#ffffff" "#00000000" "#0c0c0c00"
+client.background           "#FFFFFF00"
+
+### Key bindings
+#
+# Basics:
+#
+    # Start a terminal
+    bindsym $mod+Return exec --no-startup-id $term
+
+    # Kill focused window
+    bindsym $mod+Shift+q kill
+
+    # Start your launcher
+    bindsym $mod+d exec --no-startup-id $menu
+
+    # Start firefox
+    bindsym $mod+Shift+b exec --no-startup-id firefox
+
+    # Start Nautilus
+    bindsym $mod+Shift+f exec --no-startup-id nautilus
+
+    # Reload $the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Reload polybar config
+    bindsym $mod+Mod1+p exec --no-startup-id pkill -USR1 polybar
+
+    # Reload picom
+    bindsym $mod+Shift+p exec --no-startup-id pkill -USR1 picom
+
+    ### Show/Hide bottom music bar
+    #
+    # Show Bar
+    bindsym $mod+m exec --no-startup-id i3-msg 'exec --no-startup-id polybar bottom-center&' && i3-msg 'gaps bottom all set 35 '
+    
+    # Hide Bar
+    bindsym $mod+Shift+m exec --no-startup-id i3-msg 'exec --no-startup-id pkill polybar&' && i3-msg 'gaps bottom all set 20 ' && i3-msg 'exec --no-startup-id ~/.config/polybar/launch.sh &'
+ 
+    
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec i3-nag -t warning -m 'This will end your Wayland session.' -b 'Yes, exit sway' 'i3msg exit'
+#
+# System Controls
+# 
+    #Raise Volume
+    bindsym XF86AudioRaiseVolume exec amixer -q sset Master 3%+
+
+    #Lower Volume
+    bindsym XF86AudioLowerVolume exec amixer -q sset Master 3%-
+
+    #Increase Brightness
+    bindsym XF86MonBrightnessUp exec light -A 2
+
+    # Decrease Brightness
+    bindsym XF86MonBrightnessDown exec light -U 2
+
+    # fan profile
+    bindsym XF86Launch4 exec asusctl profile -n
+
+    # Keboard Backlight
+    bindsym XF86KbdBrightnessUp exec kbd_light up
+    bindsym XF86KbdBrightnessDown exec kbd_light down
+
+
+#
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+
+
+#
+# Workspaces:
+#
+    # Switch to workspace
+    bindsym $mod+1 workspace $ws1 
+    bindsym $mod+2 workspace $ws2
+    bindsym $mod+3 workspace $ws3
+    bindsym $mod+4 workspace $ws4
+    bindsym $mod+5 workspace $ws5
+    bindsym $mod+6 workspace $ws6
+    bindsym $mod+7 workspace $ws7
+    bindsym $mod+8 workspace 8
+    bindsym $mod+9 workspace 9
+    bindsym $mod+0 workspace 10
+    bindsym $mod+grave workspace $ws0
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace $ws1 
+    bindsym $mod+Shift+2 move container to workspace $ws2
+    bindsym $mod+Shift+3 move container to workspace $ws3
+    bindsym $mod+Shift+4 move container to workspace $ws4
+    bindsym $mod+Shift+5 move container to workspace $ws5
+    bindsym $mod+Shift+6 move container to workspace $ws6
+    bindsym $mod+Shift+7 move container to workspace $ws7
+    bindsym $mod+Shift+8 move container to workspace 8
+    bindsym $mod+Shift+9 move container to workspace 9
+    bindsym $mod+Shift+0 move container to workspace $ws0
+    # Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+t layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Cycle layouts
+    bindsym $mod+x layout toggle
+
+    # Make the current focus fullscreen
+    bindsym $mod+n fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
+
+    # Move focus to the parent container
+    bindsym $mod+a focus parent
+
+    # Move focus to child container
+    bindsym $mod+c focus child
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Ditto, with arrow keys
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
