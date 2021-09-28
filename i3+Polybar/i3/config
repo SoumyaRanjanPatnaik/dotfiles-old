@@ -1,17 +1,46 @@
+# i3 config file (v4)
+#
+# Please see https://i3wm.org/docs/userguide.html for a complete reference!
+#
+# This config file uses keycodes (bindsym) and was written for the QWERTY
+# layout.
+#
+# To get a config file with the same key positions, but for your current
+# layout, use the i3-config-wizard
+#
+
+exec --no-startup-id xss-lock --transfer-sleep-lock -- betterlockscreen -l blur
+
+# NetworkManager is the most popular way to manage wireless networks on Linux,
+# and nm-applet is a desktop environment-independent system tray GUI for it.
+exec --no-startup-id nm-applet
+exec --no-startup-id blueman-applet
+
+# Notification daemon
+exec --no-startup-id deadd-notification-center
+
+# Locking Daemon
+exec --no-startup-id xss-lock -- betterlockscreen -l blur
+
+# Authentication daemon
+exec --no-startup-id lxpolkit
+
 ### Startup Scripts
 #
 # Polybar
 exec_always --no-startup-id ~/.config/polybar/launch.sh &
 # Compton
-exec_always --no-startup-id picom --config ~/.config/picom/picom.conf -b
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf --experimental-backends -b
 # Nitrogen
-exec_always --no-startup-id nitrogen --restore
+# exec_always --no-startup-id nitrogen --restore
+
+# Blur Wall (Betterlockscreen - i3lock)
+exec --no-startup-id betterlockscreen -w blur
 
 # fan-curve
 exec_always --no-startup-id asusctl fan-curve -m Quiet -f cpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
 exec_always --no-startup-id asusctl fan-curve -m Quiet -f gpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
 exec_always --no-startup-id asusctl fan-curve -m Quiet -e true
-
 
 ### Variables
 #
@@ -25,6 +54,10 @@ set $left h
 set $down j
 set $up k
 set $right l
+
+
+# use Mouse+$mod to drag floating windows to their wanted position
+floating_modifier $mod
 
 # Your preferred terminal emulator
 set $term alacritty
@@ -50,10 +83,10 @@ gaps inner 10
 gaps outer 5
 gaps bottom 20
 # Border and Titlebar
-default_border pixel 5
+default_border pixel 2
 
 # Colour Scheme
-#  colorclass                  border   background     text      indicator  child_border
+#  colorclass                  border   background     text      indicator  child_aorder
 client.focused              "#52AEFFc0" "#52AEFFfd" "#000000" "#fede00ff" "#52AEFFc0"
 client.unfocused            "#eeeeee50" "#00000070" "#ffffff" "#000000a0" "#3287db00"
 client.focused_inactive     "#3287db00" "#080808c0" "#ffffff" "#F1CF5500" "#3287db00"
@@ -83,11 +116,15 @@ client.background           "#FFFFFF00"
     # Reload $the configuration file
     bindsym $mod+Shift+c reload
 
+    # Restart i3
+    bindsym $mod+Shift+r restart
+
     # Reload polybar config
     bindsym $mod+Mod1+p exec --no-startup-id pkill -USR1 polybar
 
     # Reload picom
     bindsym $mod+Shift+p exec --no-startup-id pkill -USR1 picom
+
 
     ### Show/Hide bottom music bar
     #
@@ -95,34 +132,53 @@ client.background           "#FFFFFF00"
     bindsym $mod+m exec --no-startup-id i3-msg 'exec --no-startup-id polybar bottom-center&' && i3-msg 'gaps bottom all set 35 '
     
     # Hide Bar
-    bindsym $mod+Shift+m exec --no-startup-id i3-msg 'exec --no-startup-id pkill polybar&' && i3-msg 'gaps bottom all set 20 ' && i3-msg 'exec --no-startup-id ~/.config/polybar/launch.sh &'
+    bindsym $mod+Shift+m exec --no-startup-id i3-msg 'exec --no-startup-id pkill polybar&' && i3-msg 'gaps bottom all set 15 ' && i3-msg 'exec --no-startup-id ~/.config/polybar/launch.sh &'
  
-    
-
-    # Exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec i3-nag -t warning -m 'This will end your Wayland session.' -b 'Yes, exit sway' 'i3msg exit'
+    # Toggle All Bars
+    bindsym $mod+p exec --no-startup-id i3-msg  'exec polybar-msg cmd toggle' && i3-msg ' gaps bottom all set 15; ' 
 #
 # System Controls
 # 
+    
+    #Lock Screen
+    bindsym Control+Mod1+l exec --no-startup-id betterlockscreen -l blur --off 10
+
     #Raise Volume
-    bindsym XF86AudioRaiseVolume exec amixer -q sset Master 3%+
+    bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -q sset Master 3%+
+
 
     #Lower Volume
-    bindsym XF86AudioLowerVolume exec amixer -q sset Master 3%-
+    bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q sset Master 3%-
+
+    #Mute speakers
+    bindsym  XF86AudioMute exec --no-startup-id amixer sset 'Master' toggle 
+
+    # Play Pause Media
+    bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
 
     #Increase Brightness
-    bindsym XF86MonBrightnessUp exec light -A 2
+    bindsym XF86MonBrightnessUp exec --no-startup-id light -A 2 
 
     # Decrease Brightness
-    bindsym XF86MonBrightnessDown exec light -U 2
+    bindsym XF86MonBrightnessDown exec --no-startup-id light -U 2 
 
     # fan profile
-    bindsym XF86Launch4 exec asusctl profile -n
+    bindsym XF86Launch4 exec --no-startup-id asusctl profile -n
 
     # Keboard Backlight
-    bindsym XF86KbdBrightnessUp exec kbd_light up
-    bindsym XF86KbdBrightnessDown exec kbd_light down
+    bindsym XF86KbdBrightnessUp exec --no-startup-id kbd_light up 
+    bindsym XF86KbdBrightnessDown exec --no-startup-id kbd_light down
 
+
+    # Exit i3
+    # bindsym $mod+Shift+e exec  "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+    bindsym $mod+Shift+e exec --no-startup-id kill_all_windows && i3-msg exit
+
+#
+# PageUp, PageDown, Home, End
+#
+    # PageUp
+    bindsym XF86Launch2 exec --no-startup-id xdtool key Home 
 
 #
 # Moving around:
@@ -175,7 +231,7 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+7 move container to workspace $ws7
     bindsym $mod+Shift+8 move container to workspace 8
     bindsym $mod+Shift+9 move container to workspace 9
-    bindsym $mod+Shift+0 move container to workspace $ws0
+    bindsym $mod+Shift+grave move container to workspace $ws0
     # Note: workspaces can have any name you want, not just numbers.
     # We just use 1-10 as the default.
 #
@@ -229,20 +285,21 @@ mode "resize" {
     # right will grow the containers width
     # up will shrink the containers height
     # down will grow the containers height
-    bindsym $left resize shrink width 10px
-    bindsym $down resize grow height 10px
-    bindsym $up resize shrink height 10px
-    bindsym $right resize grow width 10px
+    bindsym $left resize shrink width 15px
+    bindsym $down resize grow height 15px
+    bindsym $up resize shrink height 15px
+    bindsym $right resize grow width 15px
 
     # Ditto, with arrow keys
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
+    bindsym Left resize shrink width 15px
+    bindsym Down resize grow height 15px
+    bindsym Up resize shrink height 15px
+    bindsym Right resize grow width 15px
 
     # Return to default mode
     bindsym Return mode "default"
     bindsym Escape mode "default"
+    bindsym $mod+r mode "default"
 }
 bindsym $mod+r mode "resize"
 

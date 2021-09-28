@@ -1,0 +1,5 @@
+set -e
+xset s off dpms 5 20 0
+betterlockscreen -l blur
+xset s off -dpms
+suspend

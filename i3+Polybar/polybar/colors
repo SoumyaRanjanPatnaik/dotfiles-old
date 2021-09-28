@@ -1,0 +1,10 @@
+[colors]
+background = #7c000000
+background-alt = #950e0e0e
+foreground = #dfdfdf
+foreground-alt = #555
+primary = #ffb52a
+secondary = #e60053
+alert = #bd2c40
+text = #ffffff
+;text = #000000
