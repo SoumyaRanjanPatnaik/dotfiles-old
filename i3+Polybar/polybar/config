@@ -17,7 +17,7 @@
 ;==========================================================
 
 [colors]
-background = #7c000000
+background = #bc000005
 background-alt = #950e0e0e
 foreground = #dfdfdf
 foreground-alt = #555
@@ -74,7 +74,7 @@ height = 27
 inherit = bar/base
 modules-left = powermenu i3 
 modules-center = xwindow mpd
-modules-right = alsa backlight temperature battery date notify
+modules-right = backlight temperature battery date notify
 
 tray-position = center
 tray-padding = -2

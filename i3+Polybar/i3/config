@@ -8,6 +8,7 @@
 # To get a config file with the same key positions, but for your current
 # layout, use the i3-config-wizard
 #
+### Startup Scripts
 
 exec --no-startup-id xss-lock --transfer-sleep-lock -- betterlockscreen -l blur
 
@@ -22,19 +23,22 @@ exec --no-startup-id deadd-notification-center
 # Locking Daemon
 exec --no-startup-id xss-lock -- betterlockscreen -l blur
 
+# Volume applet
+exec --no-startup-id volumeicon
+
 # Authentication daemon
 exec --no-startup-id lxpolkit
 
-### Startup Scripts
-#
 # Polybar
 exec_always --no-startup-id ~/.config/polybar/launch.sh &
+
 # Compton
 exec_always --no-startup-id picom --config ~/.config/picom/picom.conf --experimental-backends -b
+
 # Nitrogen
 # exec_always --no-startup-id nitrogen --restore
 
-# Blur Wall (Betterlockscreen - i3lock)
+# Set Blur Wall (Betterlockscreen - i3lock)
 exec --no-startup-id betterlockscreen -w blur
 
 # fan-curve
@@ -79,11 +83,11 @@ set $ws6 "7: Urgent"
 set $ws7 "8: Focused"
 
 # gaps
-gaps inner 10
-gaps outer 5
-gaps bottom 20
+gaps inner 7 
+gaps outer 2
+gaps bottom 16
 # Border and Titlebar
-default_border pixel 2
+default_border pixel 4
 
 # Colour Scheme
 #  colorclass                  border   background     text      indicator  child_aorder
@@ -135,7 +139,7 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+m exec --no-startup-id i3-msg 'exec --no-startup-id pkill polybar&' && i3-msg 'gaps bottom all set 15 ' && i3-msg 'exec --no-startup-id ~/.config/polybar/launch.sh &'
  
     # Toggle All Bars
-    bindsym $mod+p exec --no-startup-id i3-msg  'exec polybar-msg cmd toggle' && i3-msg ' gaps bottom all set 15; ' 
+    bindsym $mod+p exec --no-startup-id i3-msg  'exec --no-startup-id polybar-msg cmd toggle' 
 #
 # System Controls
 # 
