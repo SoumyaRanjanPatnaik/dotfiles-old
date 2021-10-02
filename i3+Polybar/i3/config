@@ -21,7 +21,7 @@ exec --no-startup-id blueman-applet
 exec --no-startup-id deadd-notification-center
 
 # Locking Daemon
-exec --no-startup-id xss-lock -- betterlockscreen -l blur
+# exec --no-startup-id xss-lock -- betterlockscreen -l blur
 
 # Volume applet
 exec --no-startup-id volumeicon
@@ -39,12 +39,16 @@ exec_always --no-startup-id picom --config ~/.config/picom/picom.conf --experime
 # exec_always --no-startup-id nitrogen --restore
 
 # Set Blur Wall (Betterlockscreen - i3lock)
-exec --no-startup-id betterlockscreen -w blur
+exec --no-startup-id betterlockscreen -w 
 
 # fan-curve
 exec_always --no-startup-id asusctl fan-curve -m Quiet -f cpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
 exec_always --no-startup-id asusctl fan-curve -m Quiet -f gpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
 exec_always --no-startup-id asusctl fan-curve -m Quiet -e true
+
+# Processor power state
+exec_always --no-startup-id sudo ryzenadj -a 5000 -b 6000 -c 6000
+
 
 ### Variables
 #
@@ -178,11 +182,21 @@ client.background           "#FFFFFF00"
     # bindsym $mod+Shift+e exec  "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
     bindsym $mod+Shift+e exec --no-startup-id kill_all_windows && i3-msg exit
 
+
 #
-# PageUp, PageDown, Home, End
+# Power Controls
 #
-    # PageUp
-    bindsym XF86Launch2 exec --no-startup-id xdtool key Home 
+    # Power saver mode
+    bindsym Mod1+p exec --no-startup-id sudo ryzenadj -a 3000 -b 3000 -c 3000 && notify-send "RyzenAdj Power Save" "Profile Limit Set to 3W"
+
+    # Balanced mode 
+    bindsym Mod1+b exec --no-startup-id sudo ryzenadj -a 5500 -b 5500 -c 5500 && notify-send "RyzenAdj Balanced" "Profile Limit Set to 5.5W"
+# Fast
+    bindsym Mod1+s exec --no-startup-id sudo ryzenadj -a 7000 -b 8000 -c 8000 && notify-send "RyzenAdj Boost" "Profile Changed to 7W"
+    # Defaults Mode
+    bindsym Mod1+d exec --no-startup-id sudo ryzenadj -a 35000 -b 35000 -c 35000 && notify-send "RyzenAdj Defaults" "Power Limit Set to 35W (MAX PERFORMANCE)"
+
+
 
 #
 # Moving around:

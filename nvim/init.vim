@@ -112,8 +112,7 @@ nnoremap <F10> :Over
 nnoremap <F11> :Step
 nnoremap <A-b><A-b> :Break<CR>
 
-" NERD COMMENT
-noremap <C-_> <plug>NERDCommenterToggle
+" Ctrl Backspace
 noremap! <C-h> <C-w>
 noremap! <C-BS> <C-w>
 inoremap <C-w> <C-\><C-o>dB
