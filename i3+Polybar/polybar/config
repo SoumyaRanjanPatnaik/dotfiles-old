@@ -17,6 +17,7 @@
 ;==========================================================
 
 [colors]
+<<<<<<< HEAD
 background = #7c000005
 background-alt = #8a0e0e0e
 foreground = #dfdfdf
@@ -24,8 +25,8 @@ foreground-alt = #555
 primary = #ffb52a
 secondary = #e60053
 alert = #bd2c40
-text = #ffffff
-;text = #000000
+;text = #ffffff
+text = #000000
 
 [bar/base]
 ;monitor = ${env:MONITOR:HDMI-1}
@@ -54,7 +55,7 @@ font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = FontAwesome:style=Regular:size=11;0
 
 [bar/bottom-center]
-background = #a0000000
+background = ${colors.background}
 inherit = bar/base
 bottom = true
 width = 40%
@@ -80,7 +81,8 @@ tray-position = center
 tray-padding = -2
 tray-size = 4
 tray-offset-x = 45.5%
-;tray-background = #0063ff
+;tray-background = ${colors.background}
+tray-foreground = ${colors.foreground}
 
 wm-restack = i3
 
@@ -475,7 +477,7 @@ ramp-capacity-0-foreground = #FF0000
 ramp-capacity-1 = 
 ramp-capacity-1-foreground = #FFaa00
 ramp-capacity-2 = 
-ramp-capacity-2-foreground = #DDDDFF
+ramp-capacity-2-foreground = ${colors.foregrouond}
 ramp-capacity-3 = 
 ramp-capacity-3-foreground = #00FF00
 ramp-capacity-4 = 
@@ -510,7 +512,7 @@ ramp-1 = 
 ramp-2 = 
 ramp-3 = 
 ramp-4 = 
-ramp-foreground = #FFFFFF
+ramp-foreground = ${colors.foreground}
 
 [module/powermenu]
 type = custom/menu
