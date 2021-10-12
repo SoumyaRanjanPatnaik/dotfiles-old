@@ -1,4 +1,5 @@
 {
-    "diagnostic.refreshOnInsertMode": true,
-    "suggest.noselect": false
+  "diagnostic.refreshOnInsertMode": true,
+  "suggest.noselect": false,
+  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "html", "javascript", "javascriptreact","typescript", "typescriptreact", "json","graphql"]
 }

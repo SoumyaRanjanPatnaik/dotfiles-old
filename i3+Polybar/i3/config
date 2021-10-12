@@ -45,7 +45,7 @@ exec --no-startup-id betterlockscreen -w
 exec_always --no-startup-id asusctl fan-curve -m Quiet -f cpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
 exec_always --no-startup-id asusctl fan-curve -m Quiet -f gpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
 exec_always --no-startup-id asusctl fan-curve -m Quiet -e true
-
+exec_always --no-startup-id asusctl -P Quiet
 # Processor power state
 exec_always --no-startup-id sudo ryzenadj -a 5000 -b 6000 -c 6000
 
@@ -63,6 +63,9 @@ set $down j
 set $up k
 set $right l
 
+# Move mouse with focu
+focus_follows_mouse no
+mouse_warping output
 
 # use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
@@ -75,16 +78,6 @@ set $term alacritty
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu "rofi -combi-modi window,drun,ssh,run -show combi -show-icons"
-
-# Workspaces
-set $ws0 "1: General"
-set $ws1 "2: Shell"
-set $ws2 "3: Dev"
-set $ws3 "4: Web"
-set $ws4 "5: Music"
-set $ws5 "6: Mail"
-set $ws6 "7: Urgent"
-set $ws7 "8: Focused"
 
 # gaps
 gaps inner 7 
@@ -133,6 +126,8 @@ client.background           "#FFFFFF00"
     # Reload picom
     bindsym $mod+Shift+p exec --no-startup-id pkill -USR1 picom
 
+    ### Enable/ Disable gaps
+    #bindsym Mod1+Control+
 
     ### Show/Hide bottom music bar
     #
@@ -174,8 +169,8 @@ client.background           "#FFFFFF00"
     bindsym XF86Launch4 exec --no-startup-id asusctl profile -n
 
     # Keboard Backlight
-    bindsym XF86KbdBrightnessUp exec --no-startup-id kbd_light up 
-    bindsym XF86KbdBrightnessDown exec --no-startup-id kbd_light down
+    bindsym XF86KbdBrightnessUp exec --no-startup-id asusctl -n
+    bindsym XF86KbdBrightnessDown exec --no-startup-id asusctl -p
 
 
     # Exit i3
@@ -224,9 +219,25 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+Right move right
 
 
-#
+
+
 # Workspaces:
+# Note: workspaces can have any name you want, not just numbers.
+# We just use 1-10 as the default.
 #
+    # Workspaces
+    set $ws0 "1: General"
+    set $ws1 "2: Shell"
+    set $ws2 "3: Dev"
+    set $ws3 "4: Web"
+    set $ws4 "5: Music"
+    set $ws5 "6: Mail"
+    set $ws6 "7: Urgent"
+    set $ws7 "7"
+    set $ws8 "8"
+    set $ws9 "9"
+    set $ws10 "10"
+
     # Switch to workspace
     bindsym $mod+1 workspace $ws1 
     bindsym $mod+2 workspace $ws2
@@ -235,10 +246,12 @@ client.background           "#FFFFFF00"
     bindsym $mod+5 workspace $ws5
     bindsym $mod+6 workspace $ws6
     bindsym $mod+7 workspace $ws7
-    bindsym $mod+8 workspace 8
-    bindsym $mod+9 workspace 9
-    bindsym $mod+0 workspace 10
+    bindsym $mod+8 workspace $ws8
+    bindsym $mod+9 workspace $ws9
+    bindsym $mod+0 workspace $ws10
     bindsym $mod+grave workspace $ws0
+    
+
     # Move focused container to workspace
     bindsym $mod+Shift+1 move container to workspace $ws1 
     bindsym $mod+Shift+2 move container to workspace $ws2
@@ -250,9 +263,13 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+8 move container to workspace 8
     bindsym $mod+Shift+9 move container to workspace 9
     bindsym $mod+Shift+grave move container to workspace $ws0
-    # Note: workspaces can have any name you want, not just numbers.
-    # We just use 1-10 as the default.
-#
+
+    # Relative workspace switching
+    bindsym Mod1+plus workspace next_on_output
+    bindsym Mod1+minus workspace prev_on_output
+    bindsym $mod+w workspace back_and_forth
+
+
 # Layout stuff:
 #
     # You can "split" the current object of your focus with
@@ -270,6 +287,7 @@ client.background           "#FFFFFF00"
     bindsym $mod+x layout toggle
 
     # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
     bindsym $mod+n fullscreen
 
     # Toggle the current focus between tiling and floating mode
@@ -303,16 +321,16 @@ mode "resize" {
     # right will grow the containers width
     # up will shrink the containers height
     # down will grow the containers height
-    bindsym $left resize shrink width 15px
-    bindsym $down resize grow height 15px
-    bindsym $up resize shrink height 15px
-    bindsym $right resize grow width 15px
+    bindsym $left resize shrink width 45px
+    bindsym $down resize grow height 45px
+    bindsym $up resize shrink height 45px
+    bindsym $right resize grow width 45px
 
     # Ditto, with arrow keys
-    bindsym Left resize shrink width 15px
-    bindsym Down resize grow height 15px
-    bindsym Up resize shrink height 15px
-    bindsym Right resize grow width 15px
+    bindsym Left resize shrink width 45px
+    bindsym Down resize grow height 45px
+    bindsym Up resize shrink height 45px
+    bindsym Right resize grow width 45px
 
     # Return to default mode
     bindsym Return mode "default"

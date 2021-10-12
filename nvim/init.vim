@@ -10,8 +10,8 @@ set incsearch                                   " incremental search
 set ignorecase                                  " case insensitive 
 set mouse=v                                     " middle-click paste with 
 set hlsearch                                    " highlight search 
-set tabstop=4                                   " number of columns occupied by a tab 
-set softtabstop=4                               " see multiple spaces as tabstops so <BS> does the right thing
+set tabstop=2                                   " number of columns occupied by a tab 
+set softtabstop=2                               " see multiple spaces as tabstops so <BS> does the right thing
 set expandtab                                   " converts tabs to white space
 set shiftwidth=4                                " width for autoindents
 set autoindent                                  " indent a new line the same amount as the line just typed
@@ -32,6 +32,9 @@ set splitright                                  " open new split panes to right 
 set splitbelow
 set statusline=%F%m%r%h%w%=\ [%Y]\ [%{&ff}]\ [%l,%v]\ [%p%%]\ [%L]
 
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
 """ Plugins (vim-plug)
 call plug#begin('~/.vim/plugged')
     Plug 'dracula/vim'
@@ -49,6 +52,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'vim-airline/vim-airline'
     "Plug lightline
     Plug 'tpope/vim-surround'
+    Plug 'junegunn/rainbow_parentheses.vim'
+    Plug 'maxmellon/vim-jsx-pretty'
+    Plug 'skywind3000/asyncrun.vim'
 call plug#end()
 
 
@@ -64,6 +70,10 @@ if (has('termguicolors'))
 
 " Air-line coc integration
  let g:airline#extensions#coc#enabled = 1
+
+ " Rainbow Brackets
+let g:rainbow#max_level = 16
+let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}'], ['<', '>']]
 
 
 """ KeyBindings
@@ -92,8 +102,6 @@ vnoremap <A-k> :m '<-2<CR>gv=gv
  
 " Press i to enter insert mode, and jk to exit insert mode.
 :inoremap jk <Esc>
-" <esc> to quit terminal mode
-tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 " Toggle NERDTree
 noremap <C-e> :NERDTreeToggle<CR>
 " Open file under cursor in vertical split
@@ -117,3 +125,14 @@ noremap! <C-h> <C-w>
 noremap! <C-BS> <C-w>
 inoremap <C-w> <C-\><C-o>dB
 inoremap <C-BS> <C-\><C-o>db
+
+" Terminal
+" Esc to exit terminal mode
+tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
+" Load terminal
+nnoremap <Leader>tt :AsyncRun alacritty --working-directory .<CR>
+tnoremap <C-w> <esc><C-W>
+
+" Prettier format
+vmap <leader>f <Plug>(coc-format-selected)
+nmap <leader>f <Plug>(coc-format-selected)

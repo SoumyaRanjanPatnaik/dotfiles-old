@@ -1,0 +1,24 @@
+// vim:ts=4:sw=4:et
+{
+    "border": "pixel",
+    "current_border_width": 4,
+    "floating": "auto_off",
+    "geometry": {
+       "height": 600,
+       "width": 800,
+       "x": 0,
+       "y": 0
+    },
+    "marks": [],
+    "name": "fish /home/soumyarp",
+    "percent": 1,
+    "swallows": [
+       {
+       // "class": "^Alacritty$",
+       // "instance": "^Alacritty$",
+       // "title": "^fish\\ \\/home\\/soumyarp$"
+       }
+    ],
+    "type": "con"
+}
+
