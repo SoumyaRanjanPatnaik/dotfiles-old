@@ -226,7 +226,7 @@ colors:
     
     # Dark background
     background: '0x000009'
-    foreground: '0xbbc2cf'
+    foreground: '0xffffff'
 
     # Bright and dim foreground colors
     #
