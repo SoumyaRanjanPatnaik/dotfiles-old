@@ -82,7 +82,6 @@ set $menu "rofi -combi-modi window,drun,ssh,run -show combi -show-icons"
 # gaps
 gaps inner 7 
 gaps outer 2
-gaps bottom 16
 # Border and Titlebar
 default_border pixel 4
 
@@ -127,7 +126,8 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+p exec --no-startup-id pkill -USR1 picom
 
     ### Enable/ Disable gaps
-    #bindsym Mod1+Control+
+    bindsym $mod+g exec --no-startup-id i3-msg 'gaps inner all set 7 '
+    bindsym $mod+Shift+g exec --no-startup-id i3-msg 'gaps inner all set 0' 
 
     ### Show/Hide bottom music bar
     #
@@ -135,7 +135,7 @@ client.background           "#FFFFFF00"
     bindsym $mod+m exec --no-startup-id i3-msg 'exec --no-startup-id polybar bottom-center&' && i3-msg 'gaps bottom all set 35 '
     
     # Hide Bar
-    bindsym $mod+Shift+m exec --no-startup-id i3-msg 'exec --no-startup-id pkill polybar&' && i3-msg 'gaps bottom all set 15 ' && i3-msg 'exec --no-startup-id ~/.config/polybar/launch.sh &'
+    bindsym $mod+Shift+m exec --no-startup-id i3-msg 'exec --no-startup-id pkill polybar&' && i3-msg 'gaps bottom all set 0 ' && i3-msg 'exec --no-startup-id ~/.config/polybar/launch.sh &'
  
     # Toggle All Bars
     bindsym $mod+p exec --no-startup-id i3-msg  'exec --no-startup-id polybar-msg cmd toggle' 
@@ -146,18 +146,20 @@ client.background           "#FFFFFF00"
     #Lock Screen
     bindsym Control+Mod1+l exec --no-startup-id betterlockscreen -l blur --off 10
 
-    #Raise Volume
-    bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -q sset Master 3%+
-
-
-    #Lower Volume
-    bindsym XF86AudioLowerVolume exec --no-startup-id amixer -q sset Master 3%-
+    # Increase and decrease volume
+    bindsym XF86AudioRaiseVolume exec  --no-startup-id "pactl -- set-sink-volume 0 +5%"
+    bindsym XF86AudioLowerVolume exec  --no-startup-id "pactl -- set-sink-volume 0 -5%"
 
     #Mute speakers
-    bindsym  XF86AudioMute exec --no-startup-id amixer sset 'Master' toggle 
+    bindsym  XF86AudioMute exec --no-startup-id amixer sset 'Master' toggle && amixer get Master | grep '\[on\]' && notify-send "Volume On" || notify-send "Volume Off"
+
+    #Mute Microphone
+    bindsym XF86AudioMicMute exec --no-startup-id amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"
 
     # Play Pause Media
     bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+    bindsym XF86AudioNext exec --no-startup-id playerctl next
+    bindsym XF86AudioPrev exec --no-startup-id playerctl prev
 
     #Increase Brightness
     bindsym XF86MonBrightnessUp exec --no-startup-id light -A 2 
@@ -167,6 +169,9 @@ client.background           "#FFFFFF00"
 
     # fan profile
     bindsym XF86Launch4 exec --no-startup-id asusctl profile -n
+     
+    # Touchpad toggle
+    bindsym XF86TouchpadToggle exec --no-startup-id touchpad_toggle
 
     # Keboard Backlight
     bindsym XF86KbdBrightnessUp exec --no-startup-id asusctl -n
@@ -226,14 +231,14 @@ client.background           "#FFFFFF00"
 # We just use 1-10 as the default.
 #
     # Workspaces
-    set $ws0 "1: General"
-    set $ws1 "2: Shell"
-    set $ws2 "3: Dev"
-    set $ws3 "4: Web"
-    set $ws4 "5: Music"
-    set $ws5 "6: Mail"
-    set $ws6 "7: Urgent"
-    set $ws7 "7"
+    set $ws0 "0: General"
+    set $ws1 "1: Shell"
+    set $ws2 "2: Dev"
+    set $ws3 "3: Web"
+    set $ws4 "4: Music"
+    set $ws5 "5: Mail"
+    set $ws6 "6: Urgent"
+    set $ws7 "7: Focused"
     set $ws8 "8"
     set $ws9 "9"
     set $ws10 "10"

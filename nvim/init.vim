@@ -34,7 +34,7 @@ set statusline=%F%m%r%h%w%=\ [%Y]\ [%{&ff}]\ [%l,%v]\ [%p%%]\ [%L]
 
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
-
+command W :execute ':SudaWrite'
 """ Plugins (vim-plug)
 call plug#begin('~/.vim/plugged')
     Plug 'dracula/vim'
@@ -55,6 +55,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'junegunn/rainbow_parentheses.vim'
     Plug 'maxmellon/vim-jsx-pretty'
     Plug 'skywind3000/asyncrun.vim'
+    Plug 'lambdalisue/suda.vim'
 call plug#end()
 
 

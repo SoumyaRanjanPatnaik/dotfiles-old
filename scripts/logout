@@ -1,0 +1,4 @@
+!#/bin/bash
+kill_all_windows
+username = $( printenv USER )
+pkill -KILL -u $username
