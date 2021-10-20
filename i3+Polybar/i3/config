@@ -159,7 +159,7 @@ client.background           "#FFFFFF00"
     # Play Pause Media
     bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
     bindsym XF86AudioNext exec --no-startup-id playerctl next
-    bindsym XF86AudioPrev exec --no-startup-id playerctl prev
+    bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 
     #Increase Brightness
     bindsym XF86MonBrightnessUp exec --no-startup-id light -A 2 
