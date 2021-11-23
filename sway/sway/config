@@ -1,46 +1,37 @@
-# i3 config file (v4)
-#
-# Please see https://i3wm.org/docs/userguide.html for a complete reference!
-#
-# This config file uses keycodes (bindsym) and was written for the QWERTY
-# layout.
-#
-# To get a config file with the same key positions, but for your current
-# layout, use the i3-config-wizard
-#
 ### Startup Scripts
 
-exec --no-startup-id xss-lock --transfer-sleep-lock -- betterlockscreen -l blur
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+# Indicator
+set $WOBSOCK /tmp/wobpipe.sock 
+exec rm $WOBSOCK 
+exec mkfifo $WOBSOCK
+exec tail -f $WOBSOCK | wob
+exec_always swayidle -w timeout 100 'swaylock -f -c 000000' timeout 120 'swaymsg "output * dpms off"' timeout 300 'systemclt suspend' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -f -c 000000'
+# Display
+output * bg ~/dotfiles/walls/light_bokeh.jpg fill 
+output * adaptive_sync on
+
+bar { 
+  swaybar_command waybar
+}
+
+# Notificaton Daemon
+exec_always --no-startup-id dunst
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec --no-startup-id nm-applet
-exec --no-startup-id blueman-applet
+exec_always nm-applet
+exec_always blueman-applet
 
-# Notification daemon
-exec --no-startup-id deadd-notification-center
+# Bitwarden
+exec_always --no-startup-id bitwarden
 
-# Locking Daemon
-# exec --no-startup-id xss-lock -- betterlockscreen -l blur
 
+# Waybar
+#exec_always --no-startup-id ~/.config/waybar/launch-waybar
 
 # Authentication daemon
 exec --no-startup-id lxpolkit
-
-# Polybar
-exec_always --no-startup-id ~/.config/polybar/launch.sh &
-
-# Compton
-exec_always --no-startup-id picom --config ~/.config/picom/picom.conf --experimental-backends -b
-
-# Nitrogen
-# exec_always --no-startup-id nitrogen --restore
-
-# Set Blur Wall (Betterlockscreen - i3lock)
-exec --no-startup-id betterlockscreen -w 
-
-# Volume applet
-exec --no-startup-id volumeicon
 
 # fan-curve
 exec_always --no-startup-id asusctl fan-curve -m Quiet -f cpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
@@ -63,7 +54,13 @@ set $down j
 set $up k
 set $right l
 
-# Move mouse with focu
+# Paths
+set $scripts ~/dotfiles/scripts
+# Get Volume
+#set $GET_VOL PACTL_SINK=$( pactl list short sinks | sed -e 's,^\([0-9][0-9]*\)[^0-9].*,\1,' | head -n 1 ) && VOL_NOW=$( pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $PACTL_SINK + 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,' ) && echo $VOL_NOW
+#set $GET_VOL pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
+#
+# Move mouse with focus
 focus_follows_mouse no
 mouse_warping output
 
@@ -77,7 +74,7 @@ set $term alacritty
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu "rofi -combi-modi window,drun,ssh,run -show combi -show-icons"
+set $menu "rofi -combi-modi drun,ssh,run -show combi -show-icons"
 
 # gaps
 gaps inner 7 
@@ -93,6 +90,9 @@ client.focused_inactive     "#3287db00" "#080808c0" "#ffffff" "#F1CF5500" "#3287
 client.urgent               "#FF4133c0" "#FF4133c0" "#ffffff" "#F1CF55c0" "#52AEFFa0"
 client.placeholder          "#00000000" "#0c0c0c00" "#ffffff" "#00000000" "#0c0c0c00"
 client.background           "#FFFFFF00"
+
+### Workspace Assignments
+#for_window [class="Spotify"] move container to workspace $ws4
 
 ### Key bindings
 #
@@ -119,9 +119,6 @@ client.background           "#FFFFFF00"
     # Restart i3
     bindsym $mod+Shift+r restart
 
-    # Reload polybar config
-    bindsym $mod+Mod1+p exec --no-startup-id pkill -USR1 polybar
-
     # Reload picom
     bindsym $mod+Shift+p exec --no-startup-id pkill -USR1 picom
 
@@ -132,61 +129,50 @@ client.background           "#FFFFFF00"
     bindsym Mod1+Shift+h exec --no-startup-id nmcli con down AlphaSquadron && notify-send "Disabled Hotspot"
 
     ### Enable/ Disable gaps
-    bindsym $mod+g exec --no-startup-id i3-msg 'gaps inner all set 7 '
-    bindsym $mod+Shift+g exec --no-startup-id i3-msg 'gaps inner all set 0' 
+    bindsym $mod+g exec --no-startup-id swaymsg 'gaps inner all set 7 '
+    bindsym $mod+Shift+g exec --no-startup-id swaymsg 'gaps inner all set 0' 
 
-    ### Show/Hide bottom music bar
-    #
-    # Show Bar
-    bindsym $mod+m exec --no-startup-id i3-msg 'exec --no-startup-id polybar bottom-center&' && i3-msg 'gaps bottom all set 35 '
-    
-    # Hide Bar
-    bindsym $mod+Shift+m exec --no-startup-id i3-msg 'exec --no-startup-id pkill polybar&' && i3-msg 'gaps bottom all set 0 ' && i3-msg 'exec --no-startup-id ~/.config/polybar/launch.sh &'
- 
-    # Toggle All Bars
-    bindsym $mod+p exec --no-startup-id i3-msg  'exec --no-startup-id polybar-msg cmd toggle' 
 #
 # System Controls
 # 
     
-    #Lock Screen
-    bindsym Control+Mod1+l exec --no-startup-id betterlockscreen -l blur --off 10
-
     # Increase and decrease volume
-    bindsym XF86AudioRaiseVolume exec  --no-startup-id "pactl -- set-sink-volume 0 +5%"
-    bindsym XF86AudioLowerVolume exec  --no-startup-id "pactl -- set-sink-volume 0 -5%"
-
+    bindsym --locked XF86AudioRaiseVolume exec  amixer -M set Master 5%+ unmute | sed -En 's/.*\[([0-9]+)%\].*/\1/p' | head -1 > $WOBSOCK
+    bindsym --locked XF86AudioLowerVolume exec  amixer -M set Master 5%- unmute | sed -En 's/.*\[([0-9]+)%\].*/\1/p' | head -1 > $WOBSOCK
     #Mute speakers
-    bindsym  XF86AudioMute exec --no-startup-id amixer sset 'Master' toggle && amixer get Master | grep '\[on\]' && notify-send "Volume On" || notify-send "Volume Off"
+    bindsym --locked XF86AudioMute exec amixer sset 'Master' toggle && amixer get Master | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > $WOBSOCK
 
     #Mute Microphone
-    bindsym XF86AudioMicMute exec --no-startup-id amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"
+    bindsym --locked XF86AudioMicMute exec --no-startup-id amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"
 
     # Play Pause Media
-    bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
-    bindsym XF86AudioNext exec --no-startup-id playerctl next
-    bindsym XF86AudioPrev exec --no-startup-id playerctl previous
+    bindsym --locked XF86AudioPlay exec --no-startup-id playerctl play-pause
+    bindsym --locked XF86AudioNext exec --no-startup-id playerctl next
+    bindsym --locked XF86AudioPrev exec --no-startup-id playerctl previous
 
-    #Increase Brightness
-    bindsym XF86MonBrightnessUp exec --no-startup-id light -A 2 
+    #Adjust Brightness
+    bindsym XF86MonBrightnessUp exec light -A 5 && light -G | cut -d'.' -f1 > $WOBSOCK
+    bindsym XF86MonBrightnessDown exec light -U 5 && light -G | cut -d'.' -f1 > $WOBSOCK
 
-    # Decrease Brightness
-    bindsym XF86MonBrightnessDown exec --no-startup-id light -U 2 
 
     # fan profile
-    bindsym XF86Launch4 exec --no-startup-id asusctl profile -n
+    bindsym --locked XF86Launch4 exec --no-startup-id asusctl profile -n
      
     # Touchpad toggle
-    bindsym XF86TouchpadToggle exec --no-startup-id touchpad_toggle
+    bindsym XF86TouchpadToggle exec --no-startup-id $scripts/touchpad_toggle
 
     # Keboard Backlight
-    bindsym XF86KbdBrightnessUp exec --no-startup-id asusctl -n
-    bindsym XF86KbdBrightnessDown exec --no-startup-id asusctl -p
+    bindsym --locked  XF86KbdBrightnessUp exec --no-startup-id asusctl -n
+    bindsym --locked  XF86KbdBrightnessDown exec --no-startup-id asusctl -p
 
-
+    # Screenshot
+    bindsym Print exec --no-startup-id grim - |wl-copy && notify-send "Screenshot Taken Successfully"
+    bindsym Mod1+Print exec --no-startup-id grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot Taken Successfully"
+    bindsym Mod1+Shift+Print exec --no-startup-id grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - | wl-copy && notify-send "Successfully"
+    
     # Exit i3
-    # bindsym $mod+Shift+e exec  "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
-    bindsym $mod+Shift+e exec --no-startup-id kill_all_windows && i3-msg exit
+    # bindsym $mod+Shift+e exec  "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'swaymsg exit'"
+    bindsym $mod+Shift+e exec --no-startup-id swaymsg exit
 
 
 #
@@ -350,3 +336,9 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+input type:touchpad {
+    accel_profile adaptive
+    natural_scroll enabled
+    tap enabled
+}
+for_window [title="\ -\ Sharing\ Indicator$"] floating enable, sticky enable

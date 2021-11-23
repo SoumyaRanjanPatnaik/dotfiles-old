@@ -1,0 +1,14 @@
+configuration {
+
+	modi: "drun,calc:calc,run";
+	width: 50;
+	show-icons: true;
+	icon-theme: "tela circle";
+	lines: 10;
+	fake-transparency: true;
+	sidebar-mode: true;
+}
+
+@import "/usr/share/rofi/themes/arthur.rasi"
+//@theme "/usr/share/rofi/themes/arthur.rasi"
+@theme "/usr/share/rofi/themes/DarkBlue.rasi"

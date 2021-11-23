@@ -80,7 +80,8 @@ tray-position = center
 tray-padding = -2
 tray-size = 4
 tray-offset-x = 45.5%
-;tray-background = ${colors.background}
+;tray-background = #00000000
+tray-background = ${colors.background}
 tray-foreground = ${colors.foreground}
 
 wm-restack = i3

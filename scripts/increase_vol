@@ -1,0 +1,5 @@
+#!/bin/sh
+current="$(get_volume)"
+[ $current -lt 100 ] && pactl set-sink-volume 0 +3%
+[ $current -gt 100 ] && pactl set-sink-volume 0 100%
+echo $current

@@ -180,7 +180,7 @@ font:
     style: Bold Italic
 
   # Point size
-  size: 10.5
+  size: 12
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -226,7 +226,7 @@ colors:
     
     # Dark background
     #background: '0xffffff'
-    background: '0x000009'
+    background: '0x202033'
     foreground: '0xffffff'
 
     # Bright and dim foreground colors
@@ -234,8 +234,8 @@ colors:
     # The dimmed foreground color is calculated automatically if it is not present.
     # If the bright foreground color is not set, or `draw_bold_text_with_bright_colors`
     # is `false`, the normal foreground color will be used.
-    #dim_foreground: '0x9a9a9a'
-    #bright_foreground: '0xffffff'
+    dim_foreground: '0xbababa'
+    bright_foreground: '0xffffff'
 
   # Cursor colors
   #
@@ -262,7 +262,7 @@ colors:
     blue:    '0x51afef'
     magenta: '0xc678dd'
     cyan:    '0x5699af'
-    white:   '0x202328'
+    white:   '0xc0c3c8'
 
   # Bright colors
   bright:
@@ -273,21 +273,21 @@ colors:
     blue:    '0x3071db'   # This is 2257a0 in Doom Emacs but I lightened it.
     magenta: '0xa9a1e1'
     cyan:    '0x46d9ff'
-    white:   '0xdfdfdf'
+    white:   '0xefefef'
 
   # Dim colors
   #
   # If the dim colors are not set, they will be calculated automatically based
   # on the `normal` colors.
-  #dim:
-  #  black:   '0x000000'
-  #  red:     '0x8c3336'
-  #  green:   '0x7a8530'
-  #  yellow:  '0x97822e'
-  #  blue:    '0x506d8f'
-  #  magenta: '0x80638e'
-  #  cyan:    '0x497e7a'
-  #  white:   '0x9a9a9a'
+  dim:
+    black:   '0x000000'
+    red:     '0x8c3336'
+    green:   '0x7a8530'
+    yellow:  '0x97822e'
+    blue:    '0x506d8f'
+    magenta: '0x80638e'
+    cyan:    '0x497e7a'
+    white:   '0x9a9a9a'
 
   # Indexed Colors
   #
@@ -330,7 +330,7 @@ colors:
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
 #background_opacity: 1.0
-background_opacity: 0.65
+background_opacity: 0.93
 
 #selection:
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
