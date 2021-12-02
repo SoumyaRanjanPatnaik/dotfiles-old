@@ -1,12 +1,19 @@
+### SwayLock
+set $swaylock "swaylock -f --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-pixelate 8 --effect-blur 7x7 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 0 --fade-in 0.2"
+#set $swaylock "swaylock -f --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-pixelate 8 --effect-blur 7x7 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --fade-in 0.2"
+
 ### Startup Scripts
 
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec --no-startup-id nmcli d wifi hotspot ssid alphasquadron password zephyrus
+exec amixer -M set Master 60%
 # Indicator
 set $WOBSOCK /tmp/wobpipe.sock 
 exec rm $WOBSOCK 
 exec mkfifo $WOBSOCK
 exec tail -f $WOBSOCK | wob
-exec_always swayidle -w timeout 100 'swaylock -f -c 000000' timeout 120 'swaymsg "output * dpms off"' timeout 300 'systemclt suspend' resume 'swaymsg "output * dpms on"' before-sleep 'swaylock -f -c 000000'
+#exec_always swayidle -w timeout 100 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' timeout 200 $swaylock timeout 300 'systemclt suspend' before-sleep $swaylock_nograce 
+#exec_always swayidle -w timeout 100 $swaylock timeout 300 'systemclt suspend' before-sleep $swaylock unlock 'swaymsg "output * dpms on"'
 # Display
 output * bg ~/dotfiles/walls/light_bokeh.jpg fill 
 output * adaptive_sync on
@@ -20,7 +27,7 @@ exec_always --no-startup-id dunst
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec_always nm-applet
+exec_always nm-applet --indicator
 exec_always blueman-applet
 
 # Bitwarden
@@ -39,7 +46,7 @@ exec_always --no-startup-id asusctl fan-curve -m Quiet -f gpu -D 30c:0%,40c:0%,5
 exec_always --no-startup-id asusctl fan-curve -m Quiet -e true
 exec_always --no-startup-id asusctl -P Quiet
 # Processor power state
-exec_always --no-startup-id sudo ryzenadj -a 5000 -b 6000 -c 6000
+exec_always --no-startup-id sudo ryzenadj -a 5000 -b 5000 -c 5000
 
 ### Variables
 #
@@ -108,7 +115,7 @@ client.background           "#FFFFFF00"
     bindsym $mod+d exec --no-startup-id $menu
 
     # Start firefox
-    bindsym $mod+Shift+b exec --no-startup-id firefox
+    bindsym $mod+Shift+b exec --no-startup-id firefox-wayland
 
     # Start Nautilus
     bindsym $mod+Shift+f exec --no-startup-id nautilus
@@ -123,15 +130,18 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+p exec --no-startup-id pkill -USR1 picom
 
     # Enable Hotspot
-    bindsym Mod1+h exec --no-startup-id nmcli con up AlphaSquadron
-    
+    bindsym Mod1+h exec --no-startup-id nmcli d wifi hotspot ssid alphasquadron password zephyrus && notify-send "Hotspot Turned on"
     # Enable Hotspot
-    bindsym Mod1+Shift+h exec --no-startup-id nmcli con down AlphaSquadron && notify-send "Disabled Hotspot"
+    bindsym Mod1+Shift+h exec --no-startup-id nmcli con down && notify-send "Disabled Hotspot"
 
     ### Enable/ Disable gaps
     bindsym $mod+g exec --no-startup-id swaymsg 'gaps inner all set 7 '
     bindsym $mod+Shift+g exec --no-startup-id swaymsg 'gaps inner all set 0' 
 
+    # display
+    bindsym --locked $mod+o  exec swaymsg 'output * dpms on'
+    bindsym --locked $mod+Shift+o exec swaymsg 'output * dpms off'
+    
 #
 # System Controls
 # 
@@ -151,9 +161,11 @@ client.background           "#FFFFFF00"
     bindsym --locked XF86AudioPrev exec --no-startup-id playerctl previous
 
     #Adjust Brightness
-    bindsym XF86MonBrightnessUp exec light -A 5 && light -G | cut -d'.' -f1 > $WOBSOCK
-    bindsym XF86MonBrightnessDown exec light -U 5 && light -G | cut -d'.' -f1 > $WOBSOCK
+    bindsym --locked XF86MonBrightnessUp exec light -A 5 && light -G | cut -d'.' -f1 > $WOBSOCK
+    bindsym --locked XF86MonBrightnessDown exec light -U 5 && light -G | cut -d'.' -f1 > $WOBSOCK
 
+    bindsym Control+d --locked exec swaymsg "output * dpms on"
+    bindsym Control+Shift+d --locked exec swaymsg "output * dpms off"
 
     # fan profile
     bindsym --locked XF86Launch4 exec --no-startup-id asusctl profile -n
@@ -170,10 +182,14 @@ client.background           "#FFFFFF00"
     bindsym Mod1+Print exec --no-startup-id grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot Taken Successfully"
     bindsym Mod1+Shift+Print exec --no-startup-id grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - | wl-copy && notify-send "Successfully"
     
-    # Exit i3
-    # bindsym $mod+Shift+e exec  "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'swaymsg exit'"
-    bindsym $mod+Shift+e exec --no-startup-id swaymsg exit
+    # Lo
+    bindsym Control+Mod1+l exec $swaylock
 
+    # Exit i3
+    bindsym $mod+Shift+e exec --no-startup-id swaynag -t warning -m 'Power Menu' -B 'Reboot' 'reboot'  -B 'Shutdown' 'poweroff' -B 'Logout' 'swaymsg exit'
+
+
+#
 
 #
 # Power Controls
@@ -257,12 +273,12 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+5 move container to workspace $ws5
     bindsym $mod+Shift+6 move container to workspace $ws6
     bindsym $mod+Shift+7 move container to workspace $ws7
-    bindsym $mod+Shift+8 move container to workspace 8
-    bindsym $mod+Shift+9 move container to workspace 9
+    bindsym $mod+Shift+8 move container to workspace $ws8
+    bindsym $mod+Shift+9 move container to workspace $ws9
     bindsym $mod+Shift+grave move container to workspace $ws0
 
     # Relative workspace switching
-    bindsym Mod1+plus workspace next_on_output
+    bindsym Mod1+equal workspace next_on_output
     bindsym Mod1+minus workspace prev_on_output
     bindsym $mod+w workspace back_and_forth
 
@@ -340,5 +356,8 @@ input type:touchpad {
     accel_profile adaptive
     natural_scroll enabled
     tap enabled
+    dwt enabled
 }
-for_window [title="\ -\ Sharing\ Indicator$"] floating enable, sticky enable
+for_window [app_id="firefox-trunk"] inhibit_idle fullscreen
+for_window [title="Firefox\ --\ Sharing\ Indicator"] floating enable, sticky enable
+exec "systemctl --user import-environment; systemctl --user start sway-session.target"
