@@ -117,6 +117,9 @@ client.background           "#FFFFFF00"
     # Start firefox
     bindsym $mod+Shift+b exec --no-startup-id firefox-wayland
 
+    # Open Emoji Picker
+    bindsym $mod+period exec rofimoji
+
     # Start Nautilus
     bindsym $mod+Shift+f exec --no-startup-id nautilus
 
@@ -147,8 +150,8 @@ client.background           "#FFFFFF00"
 # 
     
     # Increase and decrease volume
-    bindsym --locked XF86AudioRaiseVolume exec  amixer -M set Master 5%+ unmute | sed -En 's/.*\[([0-9]+)%\].*/\1/p' | head -1 > $WOBSOCK
-    bindsym --locked XF86AudioLowerVolume exec  amixer -M set Master 5%- unmute | sed -En 's/.*\[([0-9]+)%\].*/\1/p' | head -1 > $WOBSOCK
+    bindsym --locked XF86AudioRaiseVolume exec  amixer -M sset Master 5%+ unmute | sed -En 's/.*\[([0-9]+)%\].*/\1/p' | head -1 > $WOBSOCK
+    bindsym --locked XF86AudioLowerVolume exec  amixer -M sset Master 5%- unmute | sed -En 's/.*\[([0-9]+)%\].*/\1/p' | head -1 > $WOBSOCK
     #Mute speakers
     bindsym --locked XF86AudioMute exec amixer sset 'Master' toggle && amixer get Master | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > $WOBSOCK
 
@@ -180,9 +183,11 @@ client.background           "#FFFFFF00"
     # Screenshot
     bindsym Print exec --no-startup-id grim - |wl-copy && notify-send "Screenshot Taken Successfully"
     bindsym Mod1+Print exec --no-startup-id grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot Taken Successfully"
+    bindsym Control+Print exec --no-startup-id grim ~/Pictures/Screenshots/Screenshot_$(date +%F\_%T).png |wl-copy && notify-send "Screenshot Saved"
+    bindsym Control+Mod1+Print exec --no-startup-id grim -g "$(slurp)" ~/Pictures/Screenshots/Snip_$(date +%F\_%T).png && notify-send "Screenshot Saved"
     bindsym Mod1+Shift+Print exec --no-startup-id grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - | wl-copy && notify-send "Successfully"
     
-    # Lo
+    # Lock Scren
     bindsym Control+Mod1+l exec $swaylock
 
     # Exit i3
@@ -357,6 +362,7 @@ input type:touchpad {
     natural_scroll enabled
     tap enabled
     dwt enabled
+    scroll_factor 0.7
 }
 for_window [app_id="firefox-trunk"] inhibit_idle fullscreen
 for_window [title="Firefox\ --\ Sharing\ Indicator"] floating enable, sticky enable
