@@ -5,7 +5,7 @@ indicator
 indicator-radius=100
 indicator-thickness=7
 effect-pixelate=8
-effect-blur=7x7
+effect-blur=3x3
 line-color=00000000
 inside-color=00000088
 separator-color=00000000

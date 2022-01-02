@@ -5,6 +5,7 @@ set $swaylock "swaylock -f --screenshots --clock --indicator --indicator-radius 
 ### Startup Scripts
 
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 exec --no-startup-id nmcli d wifi hotspot ssid alphasquadron password zephyrus
 exec amixer -M set Master 60%
 # Indicator
@@ -15,7 +16,10 @@ exec tail -f $WOBSOCK | wob
 #exec_always swayidle -w timeout 100 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' timeout 200 $swaylock timeout 300 'systemclt suspend' before-sleep $swaylock_nograce 
 #exec_always swayidle -w timeout 100 $swaylock timeout 300 'systemclt suspend' before-sleep $swaylock unlock 'swaymsg "output * dpms on"'
 # Display
-output * bg ~/dotfiles/walls/light_bokeh.jpg fill 
+#output * bg ~/dotfiles/walls/light_bokeh.jpg fill 
+output * bg ~/dotfiles/walls/Dark.png fill 
+#output * bg #0c2132 solid_color 
+
 output * adaptive_sync on
 
 bar { 
@@ -83,19 +87,22 @@ set $term alacritty
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu "rofi -combi-modi drun,ssh,run -show combi -show-icons"
 
-# gaps
-gaps inner 7 
-gaps outer 2
 # Border and Titlebar
 default_border pixel 4
 
 # Colour Scheme
 #  colorclass                  border   background     text      indicator  child_aorder
-client.focused              "#52AEFFc0" "#52AEFFfd" "#000000" "#fede00ff" "#52AEFFc0"
+#client.focused              "#52AEFFc0" "#52AEFFfd" "#000000" "#fede00ff" "#52AEFFc0"
+#client.unfocused            "#eeeeee50" "#00000070" "#ffffff" "#000000a0" "#3287db00"
+#client.focused_inactive     "#3287db00" "#080808c0" "#ffffff" "#F1CF5500" "#3287db00"
+#client.urgent               "#FF4133c0" "#FF4133c0" "#ffffff" "#F1CF55c0" "#52AEFFa0"
+#client.placeholder          "#00000000" "#0c0c0c00" "#ffffff" "#00000000" "#0c0c0c00"
+#client.background           "#FFFFFF00"
+client.focused              "#124E8Ffd" "#124789fd" "#ffffff" "#fede00ff" "#124E8Ffd"
 client.unfocused            "#eeeeee50" "#00000070" "#ffffff" "#000000a0" "#3287db00"
 client.focused_inactive     "#3287db00" "#080808c0" "#ffffff" "#F1CF5500" "#3287db00"
 client.urgent               "#FF4133c0" "#FF4133c0" "#ffffff" "#F1CF55c0" "#52AEFFa0"
-client.placeholder          "#00000000" "#0c0c0c00" "#ffffff" "#00000000" "#0c0c0c00"
+client.placeholder          "#00000000" "#2c2c2c00" "#ffffff" "#00000000" "#0c0c0c00"
 client.background           "#FFFFFF00"
 
 ### Workspace Assignments
@@ -145,6 +152,8 @@ client.background           "#FFFFFF00"
     bindsym --locked $mod+o  exec swaymsg 'output * dpms on'
     bindsym --locked $mod+Shift+o exec swaymsg 'output * dpms off'
     
+    # Toggle waybar
+    bindsym $mod+p exec killall -SIGUSR1 waybar
 #
 # System Controls
 # 
@@ -362,7 +371,8 @@ input type:touchpad {
     natural_scroll enabled
     tap enabled
     dwt enabled
-    scroll_factor 0.7
+    scroll_factor 0.45
+    pointer_accel 0.3
 }
 for_window [app_id="firefox-trunk"] inhibit_idle fullscreen
 for_window [title="Firefox\ --\ Sharing\ Indicator"] floating enable, sticky enable

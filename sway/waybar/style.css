@@ -5,10 +5,11 @@
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 13px;
   min-height: 0;
+  /*color: rgb(220, 220, 220);*/
 }
 
 window#waybar {
-  background-color: rgba(43, 48, 70, 0.8);
+  background-color: #122c4f;
   /*border-bottom: 3px solid rgba(100, 114, 125, 0.5);*/
   color: #ffffff;
   transition-property: background-color;
@@ -42,18 +43,23 @@ window#waybar.chromium {
   padding: 0 5px;
   background-color: transparent;
   color: #ffffff;
+  /*color: rgb(200, 249, 216);*/
   /* Use box-shadow instead of border so the text isn't offset */
   /*box-shadow: inset 0 -3px transparent;*/
 }
 
-/* https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
+/*https://github.com/Alexays/Waybar/wiki/FAQ#the-workspace-buttons-have-a-strange-hover-effect */
 #workspaces button:hover {
-  background: rgba(43, 48, 59, 0.2);
+  background: transparent;
+  box-shadow: inherit;
+  text-shadow: inherit;
+  color: rgb(250, 250, 140);
   /*box-shadow: inset 0 -3px rgba(52, 120, 247, 0.815);*/
 }
 
 #workspaces button.focused {
-  background-color: #64727d;
+  /*background-color: #34324d;*/
+  color: rgb(150, 255, 146);
   /*box-shadow: inset 0 -3px #ffffff;*/
 }
 
@@ -62,17 +68,16 @@ window#waybar.chromium {
 }
 
 #mode {
-  background-color: rgb(255, 255, 10);
-  color: black;
-  padding: 0 5px;
+  background-color: rgb(20, 30, 60);
+  color: white;
+  padding: 5px;
   /*box-shadow: inset 0 -3px rgb(255, 215, 10);*/
 }
 
 #clock,
 #battery,
 #cpu,
-#memory,
-#disk,
+#memoryj #disk,
 #temperature,
 #backlight,
 #network,
@@ -83,8 +88,8 @@ window#waybar.chromium {
 #idle_inhibitor,
 #mpd {
   border-radius: 20px;
-  padding: 0 10px;
-  margin: 5px 4px;
+  padding: 0 5px;
+  margin: 5px 3px;
   color: #ffffff;
 }
 
@@ -103,21 +108,22 @@ window#waybar.chromium {
   /*margin-right: 6px;*/
 }
 #bluetooth {
-  background: rgba(52, 120, 247, 0.815);
+  /*background: rgba(52, 120, 247, 0.815);*/
 }
 #clock {
-  background-color: rgba(114, 181, 252, 0.384);
+  /*background-color: rgba(114, 181, 252, 0.384);*/
 }
 
 #battery {
-  background-color: #ffffff;
-  color: #000000;
+  /*background-color: #ffffff;*/
+  /*color: #000000;*/
 }
 
 #battery.charging,
 #battery.plugged {
-  color: #ffffff;
-  background-color: #26a65b;
+  color: rgb(100, 255, 100);
+  /*color: #ffffff;*/
+  /*background-color: #26a65b;*/
 }
 
 @keyframes blink {
@@ -142,39 +148,41 @@ label:focus {
 }
 
 #cpu {
-  background-color: #2ecc71;
-  color: #000000;
+  /*background-color: #2ecc71;*/
+  /*color: #000000;*/
 }
 
 #memory {
-  background-color: #9b59b6;
+  /*background-color: #9b59b6;*/
 }
 
 #disk {
-  background-color: #964b00;
+  /*background-color: #964b00;*/
 }
 
 #backlight {
-  background-color: rgb(255, 246, 116);
-  color: black;
+  /*background-color: rgb(255, 246, 116);*/
+  /*color: black;*/
 }
 
 #network {
-  background-color: rgba(0, 110, 255, 0.774);
+  /*background-color: rgba(0, 110, 255, 0.774);*/
 }
 
 #network.disconnected {
-  background-color: #f53c3c;
+  /*background-color: #f53c3c;*/
+  color: #f53c3c;
 }
 
 #pulseaudio {
-  background-color: #f1c40f;
-  color: #000000;
+  /*background-color: #f1c40f;*/
+  /*color: #000000;*/
 }
 
 #pulseaudio.muted {
-  background-color: #90b1b1;
-  color: #2a5c45;
+  /*background-color: #90b1b1;*/
+  /*color: #2a5c45;*/
+  color: rgb(20, 30, 60);
 }
 
 #custom-media {
@@ -192,15 +200,17 @@ label:focus {
 }
 
 #temperature {
-  background-color: #f0932b;
+  /*background-color: #f0932b;*/
 }
 
 #temperature.critical {
-  background-color: #eb4d4b;
+  color: #eb4d4b;
+  /*background-color: #eb4d4b;*/
 }
 
 #tray {
-  background-color: #2980b9;
+  /*background-color: #2980b9;*/
+
   /*margin-right: 20px;*/
 }
 
@@ -214,7 +224,7 @@ label:focus {
 }
 
 #idle_inhibitor {
-  background-color: #2d3436;
+  /*background-color: #2d3436;*/
 }
 
 #idle_inhibitor.activated {
@@ -222,23 +232,23 @@ label:focus {
   color: #2d3436;
 }
 
-#mpd {
-  background-color: #66cc99;
-  color: #2a5c45;
-}
+/*#mpd {*/
+/*background-color: #66cc99;*/
+/*color: #2a5c45;*/
+/*}*/
 
-#mpd.disconnected {
-  background-color: #000000;
-  opacity: 0;
-}
+/*#mpd.disconnected {*/
+/*background-color: #000000;*/
+/*opacity: 0;*/
+/*}*/
 
-#mpd.stopped {
-  background-color: #90b1b1;
-}
+/*#mpd.stopped {*/
+/*background-color: #90b1b1;*/
+/*}*/
 
-#mpd.paused {
-  background-color: #51a37a;
-}
+/*#mpd.paused {*/
+/*background-color: #51a37a;*/
+/*}*/
 
 #language {
   background: #00b093;
