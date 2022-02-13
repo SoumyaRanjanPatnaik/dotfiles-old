@@ -1,24 +1,31 @@
-### SwayLock
-set $swaylock "swaylock -f --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-pixelate 8 --effect-blur 7x7 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 0 --fade-in 0.2"
-#set $swaylock "swaylock -f --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-pixelate 8 --effect-blur 7x7 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --fade-in 0.2"
+### SwayIdle
+exec /usr/bin/swayidle -w \
+            timeout 100 'swaylock -f' \
+            timeout 200 'swaymsg "output * dpms off"' \
+            resume 'swaymsg "output * dpms on"' \
+            timeout 300 'systemctl suspend' \
+            before-sleep 'swaymsg "output * dpms off" && swaylock -f --grace 0'\
+            lock 'swaylock --grace 0'
+# Screen Sharing
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 
 ### Startup Scripts
 
 exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
-exec --no-startup-id nmcli d wifi hotspot ssid alphasquadron password zephyrus
+exec wl-paste -t text --watch clipman store
+exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman-primary.json"
+exec libinput-gestures 
+#exec nmcli d wifi hotspot ssid alphasquadron password zephyrus
 exec amixer -M set Master 60%
-# Indicator
+# Indicator 
 set $WOBSOCK /tmp/wobpipe.sock 
 exec rm $WOBSOCK 
 exec mkfifo $WOBSOCK
 exec tail -f $WOBSOCK | wob
-#exec_always swayidle -w timeout 100 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' timeout 200 $swaylock timeout 300 'systemclt suspend' before-sleep $swaylock_nograce 
-#exec_always swayidle -w timeout 100 $swaylock timeout 300 'systemclt suspend' before-sleep $swaylock unlock 'swaymsg "output * dpms on"'
+#
 # Display
-#output * bg ~/dotfiles/walls/light_bokeh.jpg fill 
 output * bg ~/dotfiles/walls/Dark.png fill 
-#output * bg #0c2132 solid_color 
 
 output * adaptive_sync on
 
@@ -27,30 +34,29 @@ bar {
 }
 
 # Notificaton Daemon
-exec_always --no-startup-id dunst
+#exec dunst
+exec swaync 
 
 # NetworkManager is the most popular way to manage wireless networks on Linux,
 # and nm-applet is a desktop environment-independent system tray GUI for it.
-exec_always nm-applet --indicator
-exec_always blueman-applet
+exec nm-applet --indicator
+exec blueman-applet
+exec kdeconnect-indicator
 
 # Bitwarden
-exec_always --no-startup-id bitwarden
-
-
-# Waybar
-#exec_always --no-startup-id ~/.config/waybar/launch-waybar
+exec bitwarden
 
 # Authentication daemon
-exec --no-startup-id lxpolkit
+exec lxpolkit
 
 # fan-curve
-exec_always --no-startup-id asusctl fan-curve -m Quiet -f cpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
-exec_always --no-startup-id asusctl fan-curve -m Quiet -f gpu -D 30c:0%,40c:0%,50c:0%,60c:5%,70c:10%,80c:35%,90c:50%,100c:60%
-exec_always --no-startup-id asusctl fan-curve -m Quiet -e true
-exec_always --no-startup-id asusctl -P Quiet
+#exec asusctl fan-curve -m Quiet -f cpu -D 30c:0,40c:0,50c:0,60c:10,70c:55,80c:95,90c:150,100c:200
+#exec asusctl fan-curve -m Quiet -f gpu -D 30c:0,40c:0,50c:0,60c:10,70c:55,80c:95,90c:150,100c:200
+exec asusctl fan-curve -m Quiet -e true
+exec asusctl -P Quiet
+
 # Processor power state
-exec_always --no-startup-id sudo ryzenadj -a 5000 -b 5000 -c 5000
+exec sudo ryzenadj -a 5000 -b 5000 -c 5000
 
 ### Variables
 #
@@ -65,12 +71,12 @@ set $down j
 set $up k
 set $right l
 
+# Displays
+set $laptop eDP-1
+set $hdmi HDMI-A-1
 # Paths
-set $scripts ~/dotfiles/scripts
-# Get Volume
-#set $GET_VOL PACTL_SINK=$( pactl list short sinks | sed -e 's,^\([0-9][0-9]*\)[^0-9].*,\1,' | head -n 1 ) && VOL_NOW=$( pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $PACTL_SINK + 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,' ) && echo $VOL_NOW
-#set $GET_VOL pactl list sinks | grep '^[[:space:]]Volume:' | head -n $(( $SINK + 1 )) | tail -n 1 | sed -e 's,.* \([0-9][0-9]*\)%.*,\1,'
-#
+set $scripts /home/soumyarp/dotfiles/scripts
+
 # Move mouse with focus
 focus_follows_mouse no
 mouse_warping output
@@ -86,18 +92,13 @@ set $term alacritty
 # on the original workspace that the command was run on.
 # set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu "rofi -combi-modi drun,ssh,run -show combi -show-icons"
+#set $menu "dmenu_run -h 30 -p exec:"
 
 # Border and Titlebar
 default_border pixel 4
 
 # Colour Scheme
-#  colorclass                  border   background     text      indicator  child_aorder
-#client.focused              "#52AEFFc0" "#52AEFFfd" "#000000" "#fede00ff" "#52AEFFc0"
-#client.unfocused            "#eeeeee50" "#00000070" "#ffffff" "#000000a0" "#3287db00"
-#client.focused_inactive     "#3287db00" "#080808c0" "#ffffff" "#F1CF5500" "#3287db00"
-#client.urgent               "#FF4133c0" "#FF4133c0" "#ffffff" "#F1CF55c0" "#52AEFFa0"
-#client.placeholder          "#00000000" "#0c0c0c00" "#ffffff" "#00000000" "#0c0c0c00"
-#client.background           "#FFFFFF00"
+#  colorclass                  border   background     text     indicator  child_border
 client.focused              "#124E8Ffd" "#124789fd" "#ffffff" "#fede00ff" "#124E8Ffd"
 client.unfocused            "#eeeeee50" "#00000070" "#ffffff" "#000000a0" "#3287db00"
 client.focused_inactive     "#3287db00" "#080808c0" "#ffffff" "#F1CF5500" "#3287db00"
@@ -113,22 +114,22 @@ client.background           "#FFFFFF00"
 # Basics:
 #
     # Start a terminal
-    bindsym $mod+Return exec --no-startup-id $term
+    bindsym $mod+Return exec $term
 
     # Kill focused window
     bindsym $mod+Shift+q kill
 
     # Start your launcher
-    bindsym $mod+d exec --no-startup-id $menu
+    bindsym $mod+d exec $menu
 
     # Start firefox
-    bindsym $mod+Shift+b exec --no-startup-id firefox-wayland
+    bindsym $mod+Shift+b exec firefox-wayland
 
     # Open Emoji Picker
-    bindsym $mod+period exec rofimoji
+    bindsym $mod+period exec /home/soumyarp/.local/bin/rofimoji
 
     # Start Nautilus
-    bindsym $mod+Shift+f exec --no-startup-id nautilus
+    bindsym $mod+Shift+f exec nautilus
 
     # Reload $the configuration file
     bindsym $mod+Shift+c reload
@@ -137,16 +138,16 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+r restart
 
     # Reload picom
-    bindsym $mod+Shift+p exec --no-startup-id pkill -USR1 picom
+    bindsym $mod+Shift+p exec pkill -USR1 picom
 
     # Enable Hotspot
-    bindsym Mod1+h exec --no-startup-id nmcli d wifi hotspot ssid alphasquadron password zephyrus && notify-send "Hotspot Turned on"
+    bindsym Mod1+h exec nmcli d wifi hotspot ssid alphasquadron password zephyrus && notify-send "Hotspot Turned on"
     # Enable Hotspot
-    bindsym Mod1+Shift+h exec --no-startup-id nmcli con down && notify-send "Disabled Hotspot"
+    bindsym Mod1+Shift+h exec nmcli con down && notify-send "Disabled Hotspot"
 
     ### Enable/ Disable gaps
-    bindsym $mod+g exec --no-startup-id swaymsg 'gaps inner all set 7 '
-    bindsym $mod+Shift+g exec --no-startup-id swaymsg 'gaps inner all set 0' 
+    bindsym $mod+g exec swaymsg 'gaps inner all set 7 '
+    bindsym $mod+Shift+g exec swaymsg 'gaps inner all set 0' 
 
     # display
     bindsym --locked $mod+o  exec swaymsg 'output * dpms on'
@@ -154,7 +155,13 @@ client.background           "#FFFFFF00"
     
     # Toggle waybar
     bindsym $mod+p exec killall -SIGUSR1 waybar
-#
+
+    # Toggle navbar
+    bindsym Mod1+n exec swaync-client -t
+
+# Sleep
+    bindsym --locked XF86Sleep exec loginctl lock-session && sudo $scripts/suspend_fast && asusctl -k off
+    bindsym --locked XF86PowerOff exec loginctl lock-session && sudo $scripts/suspend_fast && asusctl -k off 
 # System Controls
 # 
     
@@ -165,42 +172,44 @@ client.background           "#FFFFFF00"
     bindsym --locked XF86AudioMute exec amixer sset 'Master' toggle && amixer get Master | sed -En '/\[on\]/ s/.*\[([0-9]+)%\].*/\1/ p; /\[off\]/ s/.*/0/p' | head -1 > $WOBSOCK
 
     #Mute Microphone
-    bindsym --locked XF86AudioMicMute exec --no-startup-id amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"
+    bindsym --locked XF86AudioMicMute exec amixer set Capture toggle && amixer get Capture | grep '\[off\]' && notify-send "MIC switched OFF" || notify-send "MIC switched ON"
 
     # Play Pause Media
-    bindsym --locked XF86AudioPlay exec --no-startup-id playerctl play-pause
-    bindsym --locked XF86AudioNext exec --no-startup-id playerctl next
-    bindsym --locked XF86AudioPrev exec --no-startup-id playerctl previous
+    bindsym --locked XF86AudioPlay exec playerctl play-pause
+    bindsym --locked XF86AudioNext exec playerctl next
+    bindsym --locked XF86AudioPrev exec playerctl previous
 
     #Adjust Brightness
     bindsym --locked XF86MonBrightnessUp exec light -A 5 && light -G | cut -d'.' -f1 > $WOBSOCK
     bindsym --locked XF86MonBrightnessDown exec light -U 5 && light -G | cut -d'.' -f1 > $WOBSOCK
 
-    bindsym Control+d --locked exec swaymsg "output * dpms on"
-    bindsym Control+Shift+d --locked exec swaymsg "output * dpms off"
 
     # fan profile
-    bindsym --locked XF86Launch4 exec --no-startup-id asusctl profile -n
+    bindsym --locked XF86Launch4 exec asusctl profile -n
      
     # Touchpad toggle
-    bindsym XF86TouchpadToggle exec --no-startup-id $scripts/touchpad_toggle
+    bindsym XF86TouchpadToggle exec $scripts/touchpad_toggle
 
     # Keboard Backlight
-    bindsym --locked  XF86KbdBrightnessUp exec --no-startup-id asusctl -n
-    bindsym --locked  XF86KbdBrightnessDown exec --no-startup-id asusctl -p
+    bindsym --locked  XF86KbdBrightnessUp exec asusctl -n
+    bindsym --locked  XF86KbdBrightnessDown exec asusctl -p
 
-    # Screenshot
-    bindsym Print exec --no-startup-id grim - |wl-copy && notify-send "Screenshot Taken Successfully"
-    bindsym Mod1+Print exec --no-startup-id grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot Taken Successfully"
-    bindsym Control+Print exec --no-startup-id grim ~/Pictures/Screenshots/Screenshot_$(date +%F\_%T).png |wl-copy && notify-send "Screenshot Saved"
-    bindsym Control+Mod1+Print exec --no-startup-id grim -g "$(slurp)" ~/Pictures/Screenshots/Snip_$(date +%F\_%T).png && notify-send "Screenshot Saved"
-    bindsym Mod1+Shift+Print exec --no-startup-id grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"')" - | wl-copy && notify-send "Successfully"
+   # Screenshot
+    bindsym Print exec grim - |wl-copy && notify-send "Screenshot Taken Successfully"
+    bindsym Mod1+Print exec grim -g "$(slurp)" - | wl-copy && notify-send "Screenshot Taken Successfully"
+    bindsym Control+Print exec grim ~/Pictures/Screenshots/Screenshot_$(date +%F\_%T).png |wl-copy && notify-send "Screenshot Saved"
+    bindsym Control+Mod1+Print exec grim -g "$(slurp)" ~/Pictures/Screenshots/Snip_$(date +%F\_%T).png && notify-send "Screenshot Saved"
+    bindsym Mod1+Shift+Print exec grim -g "$(swaymsg -t get_tree | jq -r '.. | select(.focused?) | .rect | \(.x),\(.y) \(.width)x\(.height)')" - | wl-copy && notify-send "Successfully"
     
     # Lock Scren
-    bindsym Control+Mod1+l exec $swaylock
+    bindsym Control+Mod1+l exec "swaylock --grace 0"
+
+    # Open Clipboard history
+    bindsym $mod+comma exec clipman pick -t rofi
 
     # Exit i3
-    bindsym $mod+Shift+e exec --no-startup-id swaynag -t warning -m 'Power Menu' -B 'Reboot' 'reboot'  -B 'Shutdown' 'poweroff' -B 'Logout' 'swaymsg exit'
+    #bindsym $mod+Shift+e exec swaymsg mode "nagmode" && swaynag -t warning -m 'Power Menu' -B 'Reboot' 'reboot'  -B 'Shutdown' 'poweroff' -B 'Logout' 'swaymsg exit'
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'Power Menu' -B 'Reboot' 'reboot'  -B 'Shutdown' 'poweroff' -B 'Logout' 'swaymsg exit'
 
 
 #
@@ -209,14 +218,14 @@ client.background           "#FFFFFF00"
 # Power Controls
 #
     # Power saver mode
-    bindsym Mod1+p exec --no-startup-id sudo ryzenadj -a 3000 -b 3000 -c 3000 && notify-send "RyzenAdj Power Save" "Profile Limit Set to 3W"
+    bindsym Mod1+p exec sudo ryzenadj -a 3000 -b 3000 -c 3000 && notify-send "RyzenAdj Power Save" "Profile Limit Set to 3W"
 
     # Balanced mode 
-    bindsym Mod1+b exec --no-startup-id sudo ryzenadj -a 5500 -b 5500 -c 5500 && notify-send "RyzenAdj Balanced" "Profile Limit Set to 5.5W"
-# Fast
-    bindsym Mod1+s exec --no-startup-id sudo ryzenadj -a 7000 -b 8000 -c 8000 && notify-send "RyzenAdj Boost" "Profile Changed to 7W"
+    bindsym Mod1+b exec sudo ryzenadj -a 5500 -b 5500 -c 5500 && notify-send "RyzenAdj Balanced" "Profile Limit Set to 5.5W"
+    # Fast
+    bindsym Mod1+s exec sudo ryzenadj -a 7000 -b 8000 -c 8000 && notify-send "RyzenAdj Boost" "Profile Changed to 7W"
     # Defaults Mode
-    bindsym Mod1+d exec --no-startup-id sudo ryzenadj -a 35000 -b 35000 -c 35000 && notify-send "RyzenAdj Defaults" "Power Limit Set to 35W (MAX PERFORMANCE)"
+    bindsym Mod1+d exec sudo ryzenadj -a 35000 -b 35000 -c 35000 && notify-send "RyzenAdj Defaults" "Power Limit Set to 35W (MAX PERFORMANCE)"
 
 
 
@@ -264,7 +273,10 @@ client.background           "#FFFFFF00"
     set $ws8 "8"
     set $ws9 "9"
     set $ws10 "10"
-
+    set $ws_d0 "1: Shell"
+    set $ws_d1 "0: General"
+    set $ws_d2 "2: Dev"
+        
     # Switch to workspace
     bindsym $mod+1 workspace $ws1 
     bindsym $mod+2 workspace $ws2
@@ -289,8 +301,13 @@ client.background           "#FFFFFF00"
     bindsym $mod+Shift+7 move container to workspace $ws7
     bindsym $mod+Shift+8 move container to workspace $ws8
     bindsym $mod+Shift+9 move container to workspace $ws9
+    bindsym $mod+Shift+0 move container to workspace $ws10
     bindsym $mod+Shift+grave move container to workspace $ws0
+    bindsym $mod+Shift+w move container to workspace back_and_forth
+    bindsym Mod1+Shift+equal move container to workspace next_on_output
+    bindsym Mod1+Shift+minus move container to workspace prev_on_output
 
+    
     # Relative workspace switching
     bindsym Mod1+equal workspace next_on_output
     bindsym Mod1+minus workspace prev_on_output
@@ -309,9 +326,6 @@ client.background           "#FFFFFF00"
     bindsym $mod+s layout stacking
     bindsym $mod+t layout tabbed
     bindsym $mod+e layout toggle split
-
-    # Cycle layouts
-    bindsym $mod+x layout toggle
 
     # Make the current focus fullscreen
     bindsym $mod+f fullscreen
@@ -366,6 +380,22 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
+set $nag exec swaynagmode 
+mode "nagmode" {
+    bindsym $left $nag --select prev 
+    bindsym $right $nag --select next 
+
+    bindsym Left $nag --select prev 
+    bindsym Right $nag --select next 
+
+    bindsym Escape $nag --exit
+    bindsym q $nag --exit
+
+    bindsym Return $nag --confirm
+    bindsym Ctrl+d mode "default"
+}
+
+
 input type:touchpad {
     accel_profile adaptive
     natural_scroll enabled
@@ -376,4 +406,42 @@ input type:touchpad {
 }
 for_window [app_id="firefox-trunk"] inhibit_idle fullscreen
 for_window [title="Firefox\ --\ Sharing\ Indicator"] floating enable, sticky enable
-exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+
+#### Multi Display Config
+
+# Assigning number for better mental map of monitors
+
+#Top / Left
+set $d0 $hdmi 
+#Middle
+set $d1 $laptop
+#Bottom / Right
+#set $d2 
+
+# Positions vars
+set $d1_posx 1368
+set $d1_posy 768
+#set $d2_posx
+#set $d2_posy
+
+# Positions of displays
+output $d0 pos 0 0 
+output $d1 pos 0 $d1_posy
+#output $d2 pos $d2_posx $d2_posy
+
+# Assign workspaces to outputs
+workspace $ws_d0 output $d0
+workspace $ws_d1 output $d1
+workspace $ws_d2 output $d2
+
+# Keyboard shortcuts for outputs
+bindsym $mod+bracketleft exec swaymsg focus output $d0
+bindsym $mod+bracketright exec swaymsg focus output $d1
+bindsym $mod+apostrophe exec swaymsg focus output $d1
+bindsym $mod+Shift+bracketleft move workspace to output $d0
+bindsym $mod+Shift+bracketright move workspace to output $d1
+bindsym $mod+Shift+apostrophe move workspace to output $d2
+
+# Don't sleep on lid close when external monitor connected
+bindswitch --reload --locked lid:on output $laptop disable
+bindswitch --reload --locked lid:off output $laptop enable

@@ -226,7 +226,7 @@ colors:
     
     # Dark background
     #background: '0xffffff'
-    background: '0x041a2f'
+    background: '0x0a2043'
     foreground: '0xffffff'
 
     # Bright and dim foreground colors
@@ -329,7 +329,7 @@ colors:
 #
 # Window opacity as a floating point number from `0.0` to `1.0`.
 # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 0.6
+background_opacity: 0.75
 #background_opacity: 0.93
 
 #selection:

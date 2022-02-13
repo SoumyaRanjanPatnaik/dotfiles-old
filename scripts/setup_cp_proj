@@ -1,0 +1,9 @@
+#!/usr/bin/bash
+
+mkdir $1
+cd $1
+cp ~/Templates/competitive/template.cpp main.cpp
+cp ~/Templates/competitive/Makefile ./
+touch input.txt
+alacritty -e vi $PWD/input.txt &
+nvim main.cpp

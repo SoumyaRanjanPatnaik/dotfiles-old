@@ -32,6 +32,8 @@ set splitright                                  " open new split panes to right 
 set splitbelow
 set statusline=%F%m%r%h%w%=\ [%Y]\ [%{&ff}]\ [%l,%v]\ [%p%%]\ [%L]
 
+" Autoformat go on save
+autocmd BufWritePre *.go :silent call CocAction('runCommand', 'editor.action.organizeImport')
 
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
 command W :execute ':SudaWrite'
@@ -49,7 +51,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     Plug 'Raimondi/delimitMate'
     Plug 'shaunsingh/nord.nvim'
-    Plug 'vim-airline/vim-airline'
+    "Plug 'vim-airline/vim-airline'
     "Plug lightline
     Plug 'tpope/vim-surround'
     Plug 'junegunn/rainbow_parentheses.vim'

@@ -121,9 +121,9 @@ window#waybar.chromium {
 
 #battery.charging,
 #battery.plugged {
-  color: rgb(100, 255, 100);
-  /*color: #ffffff;*/
-  /*background-color: #26a65b;*/
+  /*color: rgb(100, 255, 100);*/
+  color: #ffffff;
+  background-color: #26a65b;
 }
 
 @keyframes blink {
@@ -171,7 +171,7 @@ label:focus {
 
 #network.disconnected {
   /*background-color: #f53c3c;*/
-  color: #f53c3c;
+  color: #ff4c4c;
 }
 
 #pulseaudio {
@@ -180,7 +180,7 @@ label:focus {
 }
 
 #pulseaudio.muted {
-  /*background-color: #90b1b1;*/
+  background-color: #90b1b1;
   /*color: #2a5c45;*/
   color: rgb(20, 30, 60);
 }
@@ -204,8 +204,8 @@ label:focus {
 }
 
 #temperature.critical {
-  color: #eb4d4b;
-  /*background-color: #eb4d4b;*/
+  /*color: #eb4d4b;*/
+  background-color: #eb4d4b;
 }
 
 #tray {

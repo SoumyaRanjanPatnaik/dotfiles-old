@@ -7,11 +7,11 @@
     "modules-left": ["sway/workspaces", "sway/mode"],
     "modules-center": ["sway/window"],
     // "modules-right": ["mpd", "idle_inhibitor", "pulseaudio", "network", "cpu", "memory", "temperature", "backlight", "keyboard-state", "sway/language", "battery", "battery#bat2", "clock", "tray"],
-    "modules-right": ["idle_inhibitor" ,"pulseaudio", "network", "backlight",  "temperature","battery", "clock", "keyboard-state", "tray"],
+    "modules-right": ["idle_inhibitor" ,"pulseaudio", "network", "backlight",  "temperature","battery", "clock", "tray"],
     // Modules configuration
      "sway/workspaces": {
          "disable-scroll": true,
-         "all-outputs": true,
+         "all-outputs": false,
          "format": "{icon} {name}",
          "format-icons": {
              "0: General": "",
@@ -25,10 +25,11 @@
              "8": "",
              "9": "",
              "10": "",
+             "D0": "",
+             "D2": "",
          }
      },
     "keyboard-state": {
-        "numlock": true,
         "capslock": true,
         "format": "{name} {icon}",
         "format-icons": {
@@ -77,7 +78,7 @@
         "spacing": 10
     },
     "clock": {
-        // "timezone": "America/New_York",
+         "timezone": "Asia/Kolkata",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },
