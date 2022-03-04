@@ -51,7 +51,7 @@ call plug#begin('~/.vim/plugged')
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     Plug 'Raimondi/delimitMate'
     Plug 'shaunsingh/nord.nvim'
-    "Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline'
     "Plug lightline
     Plug 'tpope/vim-surround'
     Plug 'junegunn/rainbow_parentheses.vim'

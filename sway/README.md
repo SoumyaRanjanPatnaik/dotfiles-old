@@ -7,7 +7,7 @@
 1. light
 1. wl-clipboard
 1. swaylock-effects (add copr in fedora)
-1. rofimoji (pip)
+1. rofimoji (pip / AUR)
 1. clipman (Clipboard)
 1. fontawesome (for waybar icons)
 1. nmcli and nm-applet (For network management and taskbar icon)
@@ -16,3 +16,4 @@
 1. alacritty (optional)
 1. feh (optional)
 1. fish (optional)
+paru -Sy fish sway swaync grim light slurp wob wl-clipboard clipman swaylock-effects-git networkmanager blueman feh asusctl supergfxctl linux-g14 linux-g14-headers polkit lxsession lxappearance lxpolkit waybar ocs-url dunst swayidle xorg-xwayland xorg-xlsclients qt5-wayland glfw-wayland libwayland libxcb python python-pip python2 pipewire lib32-pipewire  pipewire-alsa pipewire-pulse pavuctl rofimoji wtype

@@ -36,9 +36,10 @@
   /*background: black;*/
   color: white;
   text-shadow: none;
-  margin:10px 6px;
-  padding-right: 13px;
+  margin:10px 10px;
   outline: none;
+  opacity: 0.8;
+  background:transparent;
 }
 .close-button:hover {
   color: red;
@@ -52,6 +53,7 @@
   box-shadow: none;
   background: @bg;
   border: 1px solid @border-color;
+  color: white;
 }
 
 .notification-default-action:hover,

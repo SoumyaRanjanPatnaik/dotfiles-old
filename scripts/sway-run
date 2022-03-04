@@ -1,0 +1,4 @@
+#!/bin/bash
+
+export MOZ_ENABLE_WAYLAND=1
+exec sway --unsupported-gpu

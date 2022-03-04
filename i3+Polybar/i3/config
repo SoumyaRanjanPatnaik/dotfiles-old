@@ -101,6 +101,8 @@ client.background           "#FFFFFF00"
     # Start a terminal
     bindsym $mod+Return exec --no-startup-id $term
 
+    # Screenshot
+    bindsym Print exec --no-startup-id import png:- | xclip -selection clipboard -t image/png
     # Kill focused window
     bindsym $mod+Shift+q kill
 

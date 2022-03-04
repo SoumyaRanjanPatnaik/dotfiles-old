@@ -1,6 +1,6 @@
 configuration {
 
-	modi: "drun,calc:calc,run";
+	modi: "drun,run";
 	width: 50;
 	show-icons: true;
 	icon-theme: "tela circle";

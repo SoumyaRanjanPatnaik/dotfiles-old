@@ -5,17 +5,16 @@ exec /usr/bin/swayidle -w \
             resume 'swaymsg "output * dpms on"' \
             timeout 300 'systemctl suspend' \
             before-sleep 'swaymsg "output * dpms off" && swaylock -f --grace 0'\
-            lock 'swaylock --grace 0'
+            resume 'swaymsg "output * dpms on"' \
+            lock 'swaylock -f --grace 0'
 # Screen Sharing
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 
 ### Startup Scripts
-
-exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 exec wl-paste -t text --watch clipman store
 exec wl-paste -p -t text --watch clipman store -P --histpath="~/.local/share/clipman-primary.json"
 exec libinput-gestures 
+exec autotiling
 #exec nmcli d wifi hotspot ssid alphasquadron password zephyrus
 exec amixer -M set Master 60%
 # Indicator 
@@ -85,14 +84,14 @@ mouse_warping output
 floating_modifier $mod
 
 # Your preferred terminal emulator
-set $term alacritty
+set $term !(alacritty msg create-window) && alacritty
 
 # Your preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-# set $menu dmenu_path | dmenu | xargs swaymsg exec --
-set $menu "rofi -combi-modi drun,ssh,run -show combi -show-icons"
-#set $menu "dmenu_run -h 30 -p exec:"
+ #set $menu dmenu_path | dmenu | xargs swaymsg exec --
+set $menu "dmenu_run -h 30 -p exec:| xargs swaymsg exec --"
+set $menu2 "rofi -combi-modi drun,ssh,run -show combi -show-icons | xargs swaymsg exec -- "
 
 # Border and Titlebar
 default_border pixel 4
@@ -121,12 +120,13 @@ client.background           "#FFFFFF00"
 
     # Start your launcher
     bindsym $mod+d exec $menu
+    bindsym $mod+Shift+d exec $menu2
 
     # Start firefox
-    bindsym $mod+Shift+b exec firefox-wayland
+    bindsym $mod+Shift+b exec firefox
 
     # Open Emoji Picker
-    bindsym $mod+period exec /home/soumyarp/.local/bin/rofimoji
+    bindsym $mod+period exec rofimoji
 
     # Start Nautilus
     bindsym $mod+Shift+f exec nautilus
@@ -160,8 +160,8 @@ client.background           "#FFFFFF00"
     bindsym Mod1+n exec swaync-client -t
 
 # Sleep
-    bindsym --locked XF86Sleep exec loginctl lock-session && sudo $scripts/suspend_fast && asusctl -k off
-    bindsym --locked XF86PowerOff exec loginctl lock-session && sudo $scripts/suspend_fast && asusctl -k off 
+    #bindsym --locked XF86Sleep exec loginctl lock-session && sudo $scripts/suspend_fast && asusctl -k off
+    #bindsym --locked XF86PowerOff exec loginctl lock-session && sudo $scripts/suspend_fast && asusctl -k off 
 # System Controls
 # 
     
@@ -445,3 +445,6 @@ bindsym $mod+Shift+apostrophe move workspace to output $d2
 # Don't sleep on lid close when external monitor connected
 bindswitch --reload --locked lid:on output $laptop disable
 bindswitch --reload --locked lid:off output $laptop enable
+
+exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
