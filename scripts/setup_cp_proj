@@ -5,5 +5,6 @@ cd $1
 cp ~/Templates/competitive/template.cpp main.cpp
 cp ~/Templates/competitive/Makefile ./
 touch input.txt
-alacritty -e vi $PWD/input.txt &
+alacritty msg create-window -e bash -c "nvim $PWD/input.txt && fish" 
+alacritty msg create-window -e bash -c "cd $PWD && fish"
 nvim main.cpp

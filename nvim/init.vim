@@ -50,8 +50,9 @@ call plug#begin('~/.vim/plugged')
     Plug 'neovim/nvim-lspconfig'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
     Plug 'Raimondi/delimitMate'
-    Plug 'shaunsingh/nord.nvim'
+    "Plug 'shaunsingh/nord.nvim'
     Plug 'vim-airline/vim-airline'
+    Plug 'sbdchd/neoformat'
     "Plug lightline
     Plug 'tpope/vim-surround'
     Plug 'junegunn/rainbow_parentheses.vim'
@@ -110,10 +111,10 @@ noremap <C-e> :NERDTreeToggle<CR>
 " Open file under cursor in vertical split
 nnoremap gf :vert winc f<cr>
 " Move line down
-nnoremap <A-y><A-y> "zyy"zp
-vnoremap <A-y><A-y> "zy<Esc>'>"zp
-nnoremap <A-S-y><A-S-y> "zyy"zP
-vnoremap <A-S-y><A-S-y> "zy<Esc>'<"zP
+nnoremap <A-y><A-y> "zyy"zpgv
+vnoremap <A-y><A-y> "zy<Esc>'>"zpgv
+nnoremap <A-S-y><A-S-y> "zyy"zPgv
+vnoremap <A-S-y><A-S-y> "zy<Esc>'<"zPgv
 
 " Debugging (C++)
 packadd termdebug
@@ -133,7 +134,7 @@ inoremap <C-BS> <C-\><C-o>db
 " Esc to exit terminal mode
 tnoremap <expr> <Esc> (&filetype == "fzf") ? "<Esc>" : "<c-\><c-n>"
 " Load terminal
-nnoremap <Leader>tt :AsyncRun alacritty --working-directory .<CR>
+nnoremap <Leader>tt :AsyncRun alacritty msg create-window -e bash -c "cd $PWD && fish"<CR>
 tnoremap <C-w> <esc><C-W>
 
 " Prettier format

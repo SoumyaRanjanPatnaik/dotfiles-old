@@ -137,11 +137,8 @@ client.background           "#FFFFFF00"
     # Restart i3
     bindsym $mod+Shift+r restart
 
-    # Reload picom
-    bindsym $mod+Shift+p exec pkill -USR1 picom
-
     # Enable Hotspot
-    bindsym Mod1+h exec nmcli d wifi hotspot ssid alphasquadron password zephyrus && notify-send "Hotspot Turned on"
+    bindsym Mod1+h exec nmcli up ArcoLinux
     # Enable Hotspot
     bindsym Mod1+Shift+h exec nmcli con down && notify-send "Disabled Hotspot"
 
@@ -326,6 +323,7 @@ client.background           "#FFFFFF00"
     bindsym $mod+s layout stacking
     bindsym $mod+t layout tabbed
     bindsym $mod+e layout toggle split
+    bindsym $mod+Shift+p sticky toggle
 
     # Make the current focus fullscreen
     bindsym $mod+f fullscreen
