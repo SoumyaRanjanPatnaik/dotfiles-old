@@ -13,7 +13,7 @@
     "graphql"
   ],
   "languageserver": {
-      "golang": {
+    "golang": {
       "command": "gopls",
       "rootPatterns": ["go.work", "go.mod", ".vim/", ".git/", ".hg/"],
       "filetypes": ["go"],
@@ -21,6 +21,7 @@
         "usePlaceholders": true,
         "gofumpt": true
       }
-      }
-  }
+    }
+  },
+  "clangd.compilationDatabasePath": "build"
 }
