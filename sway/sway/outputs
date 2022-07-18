@@ -1,0 +1,9 @@
+output "eDP-1" {
+    mode  1920x1080@120.003Hz
+    pos 0 0
+    transform normal
+    scale 1.100000023841858
+    scale_filter linear
+    adaptive_sync on
+    dpms on
+}

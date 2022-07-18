@@ -1,0 +1,10 @@
+#!/usr/bin/bash
+
+mkdir $1
+cd $1
+cp ~/Templates/competitive_blank/template.cpp main.cpp
+cp ~/Templates/competitive_blank/Makefile ./
+touch input.txt
+alacritty msg create-window -e bash -c "nvim $PWD/input.txt && fish" 
+alacritty msg create-window -e bash -c "cd $PWD && fish"
+nvim main.cpp

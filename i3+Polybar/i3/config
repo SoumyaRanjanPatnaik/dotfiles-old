@@ -21,7 +21,7 @@ exec --no-startup-id blueman-applet
 exec --no-startup-id deadd-notification-center
 
 # Locking Daemon
-# exec --no-startup-id xss-lock -- betterlockscreen -l blur
+exec --no-startup-id xss-lock -- betterlockscreen -l blur
 
 
 # Authentication daemon

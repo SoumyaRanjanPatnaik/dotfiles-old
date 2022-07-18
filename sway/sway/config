@@ -1,4 +1,4 @@
-include ./config.d/*.sway.config
+include ./config.d/*
 include ./userconfig
 
 # Display
@@ -43,10 +43,11 @@ workspace $ws_d0 output $d0
 workspace $ws_d1 output $d1
 workspace $ws_d2 output $d2
 
+exec swayidle -w \
+         timeout 120 'swaylock -f' \
+	 timeout 130 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+         before-sleep 'swaylock -f --grace 0'
 
 # Don't sleep on lid close when external monitor connected
 bindswitch --reload --locked lid:on output $laptop disable
 bindswitch --reload --locked lid:off output $laptop enable
-
-exec systemctl --user import-environment DISPLAY WAYLAND_DISPLAY SWAYSOCK
-exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
